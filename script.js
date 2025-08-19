@@ -1,5 +1,10 @@
+// placemarkコンテナを取得
+const placemarkContainer = document.getElementById("placemarks-list");
 
-document.getElementByID("btn1").addEventListener("click", ()->{ loadAndDisplayPrefPlacemarks(code);})
+// ボタンのクリックイベント
+document.getElementById("btn1").addEventListener("click", () => {
+  loadAndDisplayPlacemarks("placemark/35.kml"); // テスト用に直接指定
+});
 
 function loadAndDisplayPlacemarks(kmlPath) {
   placemarkContainer.style.display = "flex";
@@ -24,7 +29,7 @@ function loadAndDisplayPlacemarks(kmlPath) {
       for (const placemark of placemarks) {
         const name = placemark.getElementsByTagName("name")[0]?.textContent || "名称不明";
         const descNode = placemark.getElementsByTagName("description")[0];
-        const desc = descNode ? descNode.innerHTML : "";
+        const desc = descNode ? descNode.textContent : "";
         const coords = placemark.getElementsByTagName("coordinates")[0]?.textContent.trim() || "";
         const [lng, lat] = coords.split(",");
 
