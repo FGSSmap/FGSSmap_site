@@ -3,7 +3,7 @@ const placemarkContainer = document.getElementById("placemarks-list");
 
 // ボタンのクリックイベント
 document.getElementById("btn1").addEventListener("click", () => {
-  loadAndDisplayPlacemarks("placemark/35.kml"); // テスト用に直接指定
+  loadAndDisplayPlacemarks("placemark/campus.kml"); // テスト用に直接指定
 });
 
 function loadAndDisplayPlacemarks(kmlPath) {
