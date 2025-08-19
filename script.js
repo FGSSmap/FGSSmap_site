@@ -1,3 +1,6 @@
+
+document.getElementByID("btn1").addEventListener("click", ()->{ loadAndDisplayPrefPlacemarks(code);})
+
 function loadAndDisplayPlacemarks(kmlPath) {
   placemarkContainer.style.display = "flex";
 
