@@ -1,80 +1,341 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FGSSmap | 思い出の地図を見る</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <!-- CSSファイルのパスを修正 -->
-  <link rel="stylesheet" href="style.css/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --primary: #5c6bc0;
+      --accent: #ff7043;
+      --bg: #f9f9f9;
+      --card-bg: #fff;
+      --text: #333;
+      --muted: #777;
+    }
+    body.dark-mode {
+      --bg: #2b2b2b;
+      --card-bg: #3c3c3c;
+      --text: #f0f0f0;
+      --muted: #aaa;
+    }
+
+    /* リセット */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    h1,h2,h3 { font-weight: 600; }
+
+    /* コンテナ */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ヘッダー */
+    header {
+      background-color: var(--primary);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+      position: relative;
+    }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-title img {
+      width: 40px;
+    }
+    .site-title {
+      font-size: 1.4rem;
+    }
+    #modeToggle {
+      position: absolute;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* ヒーロー */
+    .hero {
+      background: linear-gradient(rgba(92,107,192,0.8),rgba(92,107,192,0.8)),url('hero-bg.jpg') center/cover no-repeat;
+      color: #fff;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
+    .hero p  { font-size: 1.1rem; }
+
+    /* 各セクション */
+    section {
+      text-align: center;
+      margin-top: 60px;
+    }
+    section h2 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+
+    /* 地図 */
+    .map-container iframe {
+      width: 100%;
+      max-width: 1000px;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* 検索バー */
+    .search-bar {
+      margin-bottom: 24px;
+    }
+    .search-bar input {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    /* メモリーカード */
+    .memory-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      justify-content: center;
+      gap: 24px;
+      margin: 0 auto;
+    }
+    .memory-card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: left;
+    }
+    .memory-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    .memory-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .memory-card-content {
+      padding: 16px;
+    }
+    .memory-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .memory-card p {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .memory-card span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* 運営団体 */
+    .organization p {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .insta-link {
+      display: inline-block;
+      margin-top: 16px;
+      background-color: var(--accent);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .insta-link:hover {
+      opacity: 0.8;
+    }
+
+    /* フッター */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #eee;
+      color: #555;
+      font-size: 0.85rem;
+      margin-top: 60px;
+    }
+
+    /* Back to Top */
+    #toTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: none;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+    #toTop:hover { opacity: 1; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+      .hero p  { font-size: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="logo-title">
-      <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ" class="logo">
-      <div class="title-text">
-        <h1>FGSSmap</h1>
-        <p>みんなの思い出の場所を地図で見てみよう</p>
+  <header>
+    <div class="container nav">
+      <div class="logo-title">
+        <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ" />
+        <span class="site-title">FGSSmap</span>
       </div>
+      <button id="modeToggle" aria-label="ダークモード切り替え">🌙</button>
     </div>
   </header>
 
-  <main>
-    <section class="intro">
+  <div class="hero">
+    <div class="container">
+      <h1>みんなの思い出を地図に刻もう</h1>
+      <p>みんなの思い出を世界中の人に共有しよう！</p>
+    </div>
+  </div>
+
+  <section id="map">
+    <div class="container">
       <h2>思い出マップ</h2>
-      <p>大学生活の思い出がピンとして地図に残されています。気になる場所をクリックして、誰かの記憶をのぞいてみましょう。</p>
-    </section>
-
-    <section class="map-container">
-      <iframe
-        src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13"
-        width="100%"
-        height="600"
-        loading="lazy"
-        title="FGSSmap 思い出マップ"
-      ></iframe>
-    </section>
-
-    <section class="memory-list">
-      <h2>📍 思い出の場所一覧</h2>
-      <div class="memory-cards">
-
-        <div class="memory-card">
-          <h3>唐戸市場</h3>
-          <p>友達と朝から海鮮丼を食べに行った思い出。人が多くて賑やかだったけど、海の匂いと活気が最高だった。</p>
-          <span>📅 2023年5月</span>
-        </div>
-
-        <div class="memory-card">
-          <h3>火の山公園</h3>
-          <p>夜景が綺麗で、告白スポットとしても有名。あの日の星空は今でも忘れられない。</p>
-          <span>📅 2022年11月</span>
-        </div>
-
-        <div class="memory-card">
-          <h3>下関駅前</h3>
-          <p>卒業式の帰りにみんなで写真を撮った場所。涙と笑顔が混ざった特別な瞬間。</p>
-          <span>📅 2024年3月</span>
-        </div>
-
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&amp;hl=ja&amp;ll=34.12382662506017,131.43323404999998&amp;z=13"
+          loading="lazy"
+          title="思い出マップ"
+        ></iframe>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="organization">
+  <section id="memories">
+    <div class="container">
+      <h2>📍 思い出の場所一覧</h2>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="場所名で検索…" />
+      </div>
+      <div class="memory-cards" id="cardsContainer">
+        <div class="memory-card">
+          <img src="karato.jpg" alt="唐戸市場" />
+          <div class="memory-card-content">
+            <h3>唐戸市場</h3>
+            <p>友達と朝から海鮮丼を食べに行った思い出。活気あふれる雰囲気が最高だった。</p>
+            <span>📅 2023年5月</span>
+          </div>
+        </div>
+        <div class="memory-card">
+          <img src="hinoyama.jpg" alt="火の山公園" />
+          <div class="memory-card-content">
+            <h3>火の山公園</h3>
+            <p>夜景が綺麗で、告白スポットとしても有名。あの日の星空は忘れられない。</p>
+            <span>📅 2022年11月</span>
+          </div>
+        </div>
+        <div class="memory-card">
+          <img src="station.jpg" alt="下関駅前" />
+          <div class="memory-card-content">
+            <h3>下関駅前</h3>
+            <p>卒業式の帰りにみんなで写真を撮った場所。涙と笑顔の混じった瞬間。</p>
+            <span>📅 2024年3月</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container organization">
       <h2>🎓 運営団体について</h2>
-      <p>このプロジェクトは、山口大学国際総合科学部国際総合科学科公認サークルの <strong>Palet's</strong> によって運営されています。<br>
-      思い出を形にし、みんなで共有することで、地域や仲間とのつながりを深めることを目指しています。</p>
-      <a href="https://www.instagram.com/palets_fgss/" target="_blank" class="insta-link">
-        📸 Instagramで活動を見る
+      <p>
+        このプロジェクトは、山口大学国際総合科学部公認サークル
+        <strong>Palet's</strong> によって運営されています。思い出を形にし、
+        みんなで共有することで、つながりを深めます。
+      </p>
+      <a
+        href="https://www.instagram.com/palets_fgss/"
+        target="_blank"
+        class="insta-link"
+      >
+        Instagramで活動を見る
       </a>
-    </section>
-  </main>
+    </div>
+  </section>
 
   <footer>
-    <p>&copy; 2025 Palet's. All rights reserved.</p>
+    <div class="container">
+      <p>&copy; 2025 Palet's. All rights reserved.</p>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <button id="toTop" aria-label="トップに戻る">↑</button>
+
+  <script>
+    // ダークモード切り替え
+    document.getElementById('modeToggle').addEventListener('click', (e) => {
+      document.body.classList.toggle('dark-mode');
+      e.currentTarget.textContent =
+        document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+    // Back to Top
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      toTop.style.display = window.pageYOffset > 300 ? 'block' : 'none';
+    });
+    toTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    // 検索フィルター
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const kw = e.target.value.toLowerCase();
+      document.querySelectorAll('.memory-card').forEach((card) => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(kw) ? '' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>
