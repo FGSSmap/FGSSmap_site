@@ -18,3 +18,78 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FGSSmap | 思い出の地図を見る</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>FGSSmap</h1>
+    <p>みんなの思い出の場所を地図で見てみよう</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>思い出マップ</h2>
+      <p>大学生活の思い出がピンとして地図に残されています。気になる場所をクリックして、誰かの記憶をのぞいてみましょう。</p>
+    </section>
+
+    <section class="map-container">
+      <iframe
+        src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13"
+        width="100%"
+        height="600"
+        loading="lazy"
+        title="FGSSmap 思い出マップ"
+      ></iframe>
+    </section>
+
+    <section class="memory-list">
+      <h2>📍 思い出の場所一覧</h2>
+      <div class="memory-cards">
+
+        <div class="memory-card">
+          <h3>唐戸市場</h3>
+          <p>友達と朝から海鮮丼を食べに行った思い出。人が多くて賑やかだったけど、海の匂いと活気が最高だった。</p>
+          <span>📅 2023年5月</span>
+        </div>
+
+        <div class="memory-card">
+          <h3>火の山公園</h3>
+          <p>夜景が綺麗で、告白スポットとしても有名。あの日の星空は今でも忘れられない。</p>
+          <span>📅 2022年11月</span>
+        </div>
+
+        <div class="memory-card">
+          <h3>下関駅前</h3>
+          <p>卒業式の帰りにみんなで写真を撮った場所。涙と笑顔が混ざった特別な瞬間。</p>
+          <span>📅 2024年3月</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="organization">
+      <h2>🎓 運営団体について</h2>
+      <p>このプロジェクトは、山口大学国際総合科学部国際総合科学科公認サークルの <strong>Palet's</strong> によって運営されています。<br>
+      思い出を形にし、みんなで共有することで、地域や仲間とのつながりを深めることを目指しています。</p>
+      <a href="https://www.instagram.com/palets_fgss/" target="_blank" class="insta-link">
+        📸 Instagramで活動を見る
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Palet's. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
