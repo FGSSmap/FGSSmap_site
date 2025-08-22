@@ -9,7 +9,6 @@
     rel="stylesheet"
   />
   <style>
-    /* ベースフォントサイズの切り替え変数 */
     :root {
       --base-font-size: 16px;
       --primary: #5c6bc0;
@@ -27,7 +26,6 @@
     html.font-medium { --base-font-size: 16px; }
     html.font-large { --base-font-size: 18px; }
 
-    /* ダークモード */
     body.dark-mode {
       --bg: #2b2b2b;
       --card-bg: #3c3c3c;
@@ -35,7 +33,6 @@
       --muted: #aaa;
     }
 
-    /* リセット */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Montserrat', sans-serif;
@@ -45,11 +42,7 @@
     }
     a { color: inherit; text-decoration: none; }
     h1,h2,h3 { font-weight: 600; }
-
-    /* コンテナ */
     .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-
-    /* ヘッダー */
     header {
       background: var(--primary);
       color: #fff;
@@ -64,7 +57,6 @@
       height: 60px;
       position: relative;
     }
-    /* フォントサイズ選択ボタン */
     .font-size-selector {
       position: absolute;
       left: 20px;
@@ -81,15 +73,11 @@
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    .font-size-button:hover {
-      background: rgba(255,255,255,0.2);
-    }
+    .font-size-button:hover { background: rgba(255,255,255,0.2); }
     .font-size-button.active {
       background: #fff;
       color: var(--primary);
     }
-
-    /* ロゴ＋タイトル */
     .logo-title {
       display: flex;
       align-items: center;
@@ -97,8 +85,6 @@
     }
     .logo-title img { width: 40px; }
     .site-title { font-size: 1.4rem; }
-
-    /* ダークモード切替 */
     #modeToggle {
       position: absolute;
       right: 20px;
@@ -108,8 +94,6 @@
       font-size: 1.2rem;
       cursor: pointer;
     }
-
-    /* ヒーロー */
     .hero {
       background:
         linear-gradient(rgba(92,107,192,0.8),rgba(92,107,192,0.8)),
@@ -120,16 +104,12 @@
     }
     .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
     .hero p  { font-size: 1.1rem; }
-
-    /* 各セクション */
     section { text-align: center; margin-top: 60px; }
     section h2 {
       font-size: 1.6rem;
       color: var(--primary);
       margin-bottom: 24px;
     }
-
-    /* 地図 */
     .map-container iframe {
       width: 100%;
       max-width: 1000px;
@@ -138,8 +118,6 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
-    /* 検索バー */
     .search-bar { margin-bottom: 24px; }
     .search-bar input {
       width: 100%;
@@ -149,8 +127,6 @@
       border-radius: 4px;
       font-size: 0.95rem;
     }
-
-    /* 思い出カード */
     .memory-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
@@ -176,7 +152,10 @@
       object-fit: cover;
     }
     .memory-card-content { padding: 16px; }
-    .memory-card h3 { margin-bottom: 8px; font-size: 1.1rem; }
+    .memory-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
     .memory-card p {
       margin-bottom: 12px;
       color: var(--muted);
@@ -186,8 +165,6 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
-
-    /* 運営団体 */
     .organization p {
       margin-bottom: 12px;
       font-size: 0.95rem;
@@ -204,8 +181,6 @@
       transition: opacity 0.2s;
     }
     .insta-link:hover { opacity: 0.8; }
-
-    /* フッター */
     footer {
       text-align: center;
       padding: 20px;
@@ -214,8 +189,6 @@
       font-size: 0.85rem;
       margin-top: 60px;
     }
-
-    /* Back to Top */
     #toTop {
       position: fixed;
       bottom: 30px;
@@ -233,7 +206,6 @@
       z-index: 100;
     }
     #toTop:hover { opacity: 1; }
-
     @media (max-width: 600px) {
       .hero h1 { font-size: 2rem; }
       .hero p  { font-size: 1rem; }
@@ -250,7 +222,7 @@
         <button class="font-size-button" data-size="font-large">大</button>
       </div>
       <div class="logo-title">
-        <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ" />
+        <img src="FGSSmap-icon.png" alt="FGSSmapロゴ" />
         <span class="site-title">FGSSmap</span>
       </div>
       <button id="modeToggle" aria-label="ダークモード切り替え">🌙</button>
@@ -284,30 +256,7 @@
         <input type="text" id="searchInput" placeholder="場所名で検索…" />
       </div>
       <div class="memory-cards" id="cardsContainer">
-        <div class="memory-card">
-          <img src="karato.jpg" alt="唐戸市場" />
-          <div class="memory-card-content">
-            <h3>唐戸市場</h3>
-            <p>友達と朝から海鮮丼を食べに行った思い出。活気あふれる雰囲気が最高だった。</p>
-            <span>📅 2023年5月</span>
-          </div>
-        </div>
-        <div class="memory-card">
-          <img src="hinoyama.jpg" alt="火の山公園" />
-          <div class="memory-card-content">
-            <h3>火の山公園</h3>
-            <p>夜景が綺麗で、告白スポットとしても有名。あの日の星空は忘れられない。</p>
-            <span>📅 2022年11月</span>
-          </div>
-        </div>
-        <div class="memory-card">
-          <img src="station.jpg" alt="下関駅前" />
-          <div class="memory-card-content">
-            <h3>下関駅前</h3>
-            <p>卒業式の帰りにみんなで写真を撮った場所。涙と笑顔の混じった瞬間。</p>
-            <span>📅 2024年3月</span>
-          </div>
-        </div>
+        <!-- 静的カードはここに配置 -->
       </div>
     </div>
   </section>
@@ -339,7 +288,7 @@
   <button id="toTop" aria-label="トップに戻る">↑</button>
 
   <script>
-    // フォントサイズ切替ボタン
+    // フォントサイズ切替
     document.querySelectorAll('.font-size-button').forEach(btn => {
       btn.addEventListener('click', () => {
         document.documentElement.classList.remove('font-small','font-medium','font-large');
@@ -372,6 +321,31 @@
         card.style.display = title.includes(kw) ? '' : 'none';
       });
     });
+
+    // KMLから思い出カードを生成
+    fetch('https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1&cid=mp&cv=G1AlQdVXWkg.ja.')
+      .then(res => res.text())
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(kml => {
+        const placemarks = kml.querySelectorAll('Placemark');
+        const container = document.getElementById('cardsContainer');
+
+        placemarks.forEach(pm => {
+          const name = pm.querySelector('name')?.textContent || '名称不明';
+          const desc = pm.querySelector('description')?.textContent || '説明なし';
+          const card = document.createElement('div');
+          card.className = 'memory-card';
+          card.innerHTML = `
+            <div class="memory-card-content">
+              <h3>${name}</h3>
+              <p>${desc}</p>
+              <span>📍 My Mapsより</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(err => console.error('KML読み込みエラー:', err));
   </script>
 </body>
 </html>
