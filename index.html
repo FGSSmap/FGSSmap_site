@@ -94,6 +94,7 @@
       font-size: 1.2rem;
       cursor: pointer;
     }
+
     .hero {
       background:
         linear-gradient(rgba(92,107,192,0.8),rgba(92,107,192,0.8)),
@@ -104,12 +105,14 @@
     }
     .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
     .hero p  { font-size: 1.1rem; }
+
     section { text-align: center; margin-top: 60px; }
     section h2 {
       font-size: 1.6rem;
       color: var(--primary);
       margin-bottom: 24px;
     }
+
     .map-container iframe {
       width: 100%;
       max-width: 1000px;
@@ -118,6 +121,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
+
     .search-bar { margin-bottom: 24px; }
     .search-bar input {
       width: 100%;
@@ -127,6 +131,44 @@
       border-radius: 4px;
       font-size: 0.95rem;
     }
+
+    /* 写真カード用スタイル */
+    .photo-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .photo-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .photo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    .photo-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .photo-card .memory-card-content {
+      padding: 16px;
+    }
+    .photo-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .photo-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    /* KMLカード用スタイル */
     .memory-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
@@ -146,11 +188,6 @@
       transform: translateY(-6px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     }
-    .memory-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
     .memory-card-content { padding: 16px; }
     .memory-card h3 {
       margin-bottom: 8px;
@@ -165,6 +202,7 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
+
     .organization p {
       margin-bottom: 12px;
       font-size: 0.95rem;
@@ -181,6 +219,7 @@
       transition: opacity 0.2s;
     }
     .insta-link:hover { opacity: 0.8; }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -189,6 +228,7 @@
       font-size: 0.85rem;
       margin-top: 60px;
     }
+
     #toTop {
       position: fixed;
       bottom: 30px;
@@ -206,6 +246,7 @@
       z-index: 100;
     }
     #toTop:hover { opacity: 1; }
+
     @media (max-width: 600px) {
       .hero h1 { font-size: 2rem; }
       .hero p  { font-size: 1rem; }
@@ -255,9 +296,12 @@
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="場所名で検索…" />
       </div>
-      <div class="memory-cards" id="cardsContainer">
-        <!-- 静的カードはここに配置 -->
-      </div>
+
+      <!-- 写真カード表示エリア -->
+      <div class="photo-cards" id="photoCardsContainer"></div>
+
+      <!-- KML由来の記念カード表示エリア -->
+      <div class="memory-cards" id="cardsContainer"></div>
     </div>
   </section>
 
@@ -322,6 +366,36 @@
       });
     });
 
+    /**
+     * ==== 写真カードデータ ====
+     * ↓↓ この配列だけを編集してください ↓↓
+     */
+    const photoCardsData = [
+      {
+        img: '"C:\Users\ryoga\OneDrive\デスクトップ\Palt’s\FGSSmap\山口大学.jpg"',
+        title: '山口大学',
+        desc: '山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにもガンガン挑戦中！'
+      },
+      // 新しいカードを追加する場合は、
+      // カンマ(,)を入れて次のように続けてください：
+      // { img: '画像パス', title: 'タイトル', desc: '説明文' }
+    ];
+
+    // 写真カードを表示
+    const photoContainer = document.getElementById('photoCardsContainer');
+    photoCardsData.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.title}">
+        <div class="memory-card-content">
+          <h3>${item.title}</h3>
+          <p>${item.desc}</p>
+        </div>
+      `;
+      photoContainer.appendChild(card);
+    });
+
     // KMLから思い出カードを生成
     fetch('https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1&cid=mp&cv=G1AlQdVXWkg.ja.')
       .then(res => res.text())
@@ -329,7 +403,6 @@
       .then(kml => {
         const placemarks = kml.querySelectorAll('Placemark');
         const container = document.getElementById('cardsContainer');
-
         placemarks.forEach(pm => {
           const name = pm.querySelector('name')?.textContent || '名称不明';
           const desc = pm.querySelector('description')?.textContent || '説明なし';
