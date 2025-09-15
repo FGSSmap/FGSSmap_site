@@ -1,327 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja" class="font-medium">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FGSSmap | 思い出の地図を見る</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --base-font-size: 16px;
-      --primary: #5c6bc0;
-      --accent: #ff7043;
-      --bg: #f9f9f9;
-      --card-bg: #fff;
-      --text: #333;
-      --muted: #777;
-    }
-    html {
-      font-size: var(--base-font-size);
-      scroll-behavior: smooth;
-    }
-    html.font-small { --base-font-size: 14px; }
-    html.font-medium { --base-font-size: 16px; }
-    html.font-large { --base-font-size: 18px; }
-
-    body.dark-mode {
-      --bg: #2b2b2b;
-      --card-bg: #3c3c3c;
-      --text: #f0f0f0;
-      --muted: #aaa;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    h1,h2,h3 { font-weight: 600; }
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-    header {
-      background: var(--primary);
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 60px;
-      position: relative;
-    }
-    .font-size-selector {
-      position: absolute;
-      left: 20px;
-      display: flex;
-      gap: 6px;
-    }
-    .font-size-button {
-      background: none;
-      border: 2px solid #fff;
-      border-radius: 4px;
-      color: #fff;
-      padding: 4px 10px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .font-size-button:hover { background: rgba(255,255,255,0.2); }
-    .font-size-button.active {
-      background: #fff;
-      color: var(--primary);
-    }
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-title img { width: 40px; }
-    .site-title { font-size: 1.4rem; }
-    #modeToggle {
-      position: absolute;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .hero {
-      background:
-        linear-gradient(rgba(92,107,192,0.8),rgba(92,107,192,0.8)),
-        url('hero-bg.jpg') center/cover no-repeat;
-      color: #fff;
-      text-align: center;
-      padding: 80px 20px;
-    }
-    .hero h1 { font-size: 2.5rem; margin-bottom: 16px; }
-    .hero p  { font-size: 1.1rem; }
-
-    section { text-align: center; margin-top: 60px; }
-    section h2 {
-      font-size: 1.6rem;
-      color: var(--primary);
-      margin-bottom: 24px;
-    }
-
-    .map-container iframe {
-      width: 100%;
-      max-width: 1000px;
-      height: 500px;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .search-bar { margin-bottom: 24px; }
-    .search-bar input {
-      width: 100%;
-      max-width: 400px;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 0.95rem;
-    }
-
-    /* 写真カード用スタイル */
-    .photo-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-    .photo-card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .photo-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    }
-    .photo-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
-    .photo-card .memory-card-content {
-      padding: 16px;
-    }
-    .photo-card h3 {
-      margin-bottom: 8px;
-      font-size: 1.1rem;
-    }
-    .photo-card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    /* KMLカード用スタイル */
-    .memory-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
-      justify-content: center;
-      gap: 24px;
-      margin: 0 auto;
-    }
-    .memory-card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-align: left;
-    }
-    .memory-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    }
-    .memory-card-content { padding: 16px; }
-    .memory-card h3 {
-      margin-bottom: 8px;
-      font-size: 1.1rem;
-    }
-    .memory-card p {
-      margin-bottom: 12px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .memory-card span {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .organization p {
-      margin-bottom: 12px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-    .insta-link {
-      display: inline-block;
-      margin-top: 16px;
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: opacity 0.2s;
-    }
-    .insta-link:hover { opacity: 0.8; }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #eee;
-      color: #555;
-      font-size: 0.85rem;
-      margin-top: 60px;
-    }
-
-    #toTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      display: none;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 10px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      opacity: 0.8;
-      transition: opacity 0.3s;
-      z-index: 100;
-    }
-    #toTop:hover { opacity: 1; }
-
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 2rem; }
-      .hero p  { font-size: 1rem; }
-    }
+    :root{--base:16px;--primary:#5c6bc0;--accent:#ff7043;--bg:#f9f9f9;--card:#fff;--text:#333;--muted:#777}
+    html{font-size:var(--base);scroll-behavior:smooth}
+    html.font-small{font-size:14px}html.font-medium{font-size:16px}html.font-large{font-size:18px}
+    body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;margin:0}
+    body.dark-mode{--bg:#2b2b2b;--card:#3c3c3c;--text:#f0f0f0;--muted:#aaa}
+    *{box-sizing:border-box}a{color:inherit;text-decoration:none}
+    .container{max-width:1000px;margin:0 auto;padding:0 20px}
+    header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:1000}
+    .nav{display:flex;align-items:center;justify-content:center;height:60px;position:relative}
+    .font-size-selector{position:absolute;left:20px;display:flex;gap:6px}
+    .font-size-button{background:none;border:2px solid #fff;border-radius:4px;color:#fff;padding:4px 10px;font-size:.9rem;cursor:pointer}
+    .font-size-button.active{background:#fff;color:var(--primary)}
+    .logo-title{display:flex;align-items:center;gap:10px}
+    .logo-title img{width:40px;height:40px;object-fit:contain}
+    .site-title{font-size:1.4rem}
+    #modeToggle{position:absolute;right:20px;background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer}
+    .hero{background:linear-gradient(rgba(92,107,192,.8),rgba(92,107,192,.8)),url('hero-bg.jpg')center/cover no-repeat;color:#fff;text-align:center;padding:80px 20px}
+    .hero h1{font-size:2.5rem;margin:0 0 16px}section{margin-top:60px;text-align:center}
+    section h2{font-size:1.6rem;color:var(--primary);margin-bottom:24px}
+    .map-container iframe{width:100%;max-width:1000px;height:500px;border:none;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+    .search-bar{margin-bottom:24px}
+    .search-bar input{width:100%;max-width:400px;padding:10px 12px;border:1px solid #ccc;border-radius:4px;font-size:.95rem}
+    .photo-cards,.memory-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-bottom:40px}
+    .photo-card,.memory-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:transform .18s,box-shadow .18s;text-align:left}
+    .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
+    .photo-card img{width:100%;height:140px;object-fit:cover}
+    .memory-card-content,.memory-card .memory-card-content,.photo-card .memory-card-content{padding:16px}
+    .photo-card h3,.memory-card h3{font-size:1.1rem;margin:0 0 8px}
+    .photo-card p,.memory-card p{color:var(--muted);font-size:.95rem;margin:0 0 12px}
+    .insta-link{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:4px;font-weight:600}
+    footer{background:#eee;color:#555;text-align:center;padding:20px;margin-top:60px;font-size:.85rem}
+    #toTop{position:fixed;right:30px;bottom:30px;display:none;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:4px;cursor:pointer;font-size:1.2rem;z-index:100}
+    @media(max-width:600px){.hero h1{font-size:2rem}.hero p{font-size:1rem}}
   </style>
 </head>
 <body>
-
   <header>
-    <div class="container nav">
-      <div class="font-size-selector">
-        <button class="font-size-button" data-size="font-small">小</button>
-        <button class="font-size-button active" data-size="font-medium">中</button>
-        <button class="font-size-button" data-size="font-large">大</button>
+    <div class="container nav" role="navigation">
+      <div class="font-size-selector" role="toolbar" aria-label="フォントサイズ">
+        <button class="font-size-button" data-size="small" aria-pressed="false">小</button>
+        <button class="font-size-button active" data-size="medium" aria-pressed="true">中</button>
+        <button class="font-size-button" data-size="large" aria-pressed="false">大</button>
       </div>
+
       <div class="logo-title">
-        <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ" />
+        <img src="FGSSmap-icon.png" alt="FGSSmapロゴ">
         <span class="site-title">FGSSmap</span>
       </div>
-      <button id="modeToggle" aria-label="ダークモード切り替え">🌙</button>
+
+      <button id="modeToggle" aria-pressed="false" aria-label="ダークモード切り替え">🌙</button>
     </div>
   </header>
 
-  <div class="hero">
-    <div class="container">
-      <h1>みんなの思い出を地図に刻もう</h1>
-      <p>大学生活のワクワクを、FGSSmapでいつでも振り返ろう。</p>
-    </div>
-  </div>
-
-  <section id="map">
-    <div class="container">
-      <h2>思い出マップ</h2>
-      <div class="map-container">
-        <iframe
-          src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&amp;hl=ja&amp;ll=34.12382662506017,131.43323404999998&amp;z=13"
-          loading="lazy"
-          title="思い出マップ"
-        ></iframe>
+  <main>
+    <div class="hero">
+      <div class="container">
+        <h1>みんなの思い出を地図に刻もう</h1>
+        <p>大学生活のワクワクを、FGSSmapでいつでも振り返ろう。</p>
       </div>
     </div>
-  </section>
 
-  <section id="memories">
-    <div class="container">
-      <h2>📍 思い出の場所一覧</h2>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="場所名で検索…" />
+    <section id="map">
+      <div class="container">
+        <h2>思い出マップ</h2>
+        <div class="map-container" aria-live="polite">
+          <iframe
+            src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13"
+            loading="lazy"
+            title="思い出マップ"></iframe>
+        </div>
       </div>
+    </section>
 
-      <!-- 写真カード表示エリア -->
-      <div class="photo-cards" id="photoCardsContainer"></div>
+    <section id="memories">
+      <div class="container">
+        <h2>📍 思い出の場所一覧</h2>
+        <div class="search-bar">
+          <input id="searchInput" type="search" placeholder="場所名で検索…" aria-controls="cardsContainer photoCardsContainer">
+        </div>
 
-      <!-- KML由来の記念カード表示エリア -->
-      <div class="memory-cards" id="cardsContainer"></div>
-    </div>
-  </section>
+        <div class="photo-cards" id="photoCardsContainer" aria-live="polite"></div>
+        <div class="memory-cards" id="cardsContainer" aria-live="polite"></div>
+      </div>
+    </section>
 
-  <section id="about">
-    <div class="container organization">
-      <h2>🎓 運営団体について</h2>
-      <p>
-        このプロジェクトは、山口大学国際総合科学部公認サークル
-        <strong>Palet's</strong> によって運営されています。思い出を形にし、
-        みんなで共有することで、つながりを深めます。
-      </p>
-      <a
-        href="https://www.instagram.com/palets_fgss/"
-        target="_blank"
-        class="insta-link"
-      >
-        Instagramで活動を見る
-      </a>
-    </div>
-  </section>
+    <section id="about">
+      <div class="container organization">
+        <h2>🎓 運営団体について</h2>
+        <p>このプロジェクトは、山口大学国際総合科学部公認サークル <strong>Palet's</strong> によって運営されています。思い出を形にし、みんなで共有することで、つながりを深めます。</p>
+        <a class="insta-link" href="https://www.instagram.com/palets_fgss/" target="_blank" rel="noopener">Instagramで活動を見る</a>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <div class="container">
@@ -332,93 +109,93 @@
   <button id="toTop" aria-label="トップに戻る">↑</button>
 
   <script>
-    // フォントサイズ切替
-    document.querySelectorAll('.font-size-button').forEach(btn => {
-      btn.addEventListener('click', () => {
+    /* ユーティリティ */
+    const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
+    const escapeHtml = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    /* フォントサイズ切替（small/medium/large） + 保存 */
+    (function(){
+      const btns = $$('.font-size-button');
+      const apply = size => {
         document.documentElement.classList.remove('font-small','font-medium','font-large');
-        document.documentElement.classList.add(btn.dataset.size);
-        document.querySelectorAll('.font-size-button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
+        document.documentElement.classList.add(size === 'small' ? 'font-small' : size === 'large' ? 'font-large' : 'font-medium');
+        btns.forEach(b=>{ const on = b.dataset.size===size; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on); });
+        try{ localStorage.setItem('fgss_font_size', size); }catch(e){}
+      };
+      btns.forEach(b=>b.addEventListener('click',()=>apply(b.dataset.size)));
+      const saved = (()=>{try{return localStorage.getItem('fgss_font_size')}catch(e){return null}})();
+      apply(saved || 'medium');
+    })();
 
-    // ダークモード切替
-    document.getElementById('modeToggle').addEventListener('click', e => {
-      document.body.classList.toggle('dark-mode');
-      e.currentTarget.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    });
+    /* ダークモード切替 + 保存 */
+    (function(){
+      const btn = $('#modeToggle');
+      const apply = dark => {
+        document.body.classList.toggle('dark-mode', !!dark);
+        btn.textContent = dark ? '☀️' : '🌙'; btn.setAttribute('aria-pressed', !!dark);
+        try{ localStorage.setItem('fgss_dark_mode', !!dark ? '1':'0'); }catch(e){}
+      };
+      btn.addEventListener('click', ()=> apply(!document.body.classList.contains('dark-mode')));
+      const saved = (()=>{try{return localStorage.getItem('fgss_dark_mode')}catch(e){return null}})();
+      apply(saved===null ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) : saved==='1');
+    })();
 
-    // Back to Top
-    const toTop = document.getElementById('toTop');
-    window.addEventListener('scroll', () => {
-      toTop.style.display = window.pageYOffset > 300 ? 'block' : 'none';
-    });
-    toTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    /* Back to top */
+    (function(){
+      const toTop = $('#toTop');
+      window.addEventListener('scroll', ()=> toTop.style.display = window.pageYOffset > 300 ? 'block' : 'none');
+      toTop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+    })();
 
-    // メモリー検索フィルター
-    document.getElementById('searchInput').addEventListener('input', e => {
-      const kw = e.target.value.toLowerCase();
-      document.querySelectorAll('.memory-card').forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(kw) ? '' : 'none';
-      });
-    });
-
-    /**
-     * ==== 写真カードデータ ====
-     * ↓↓ この配列だけを編集してください ↓↓
-     */
+    /* 写真カードデータ（必要に応じてパスを assets に置く） */
     const photoCardsData = [
       {
-        img: '"C:\Users\ryoga\OneDrive\デスクトップ\やまぐちだいがく.jpg"',
+        img: 'assets/yamaguchi-univ.jpg',
         title: '山口大学',
         desc: '山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにもガンガン挑戦中！'
-      },
-      // 新しいカードを追加する場合は、
-      // カンマ(,)を入れて次のように続けてください：
-      // { img: '画像パス', title: 'タイトル', desc: '説明文' }
+      }
     ];
 
-    // 写真カードを表示
-    const photoContainer = document.getElementById('photoCardsContainer');
-    photoCardsData.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'photo-card';
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.title}">
-        <div class="memory-card-content">
-          <h3>${item.title}</h3>
-          <p>${item.desc}</p>
-        </div>
-      `;
-      photoContainer.appendChild(card);
-    });
+    /* 写真カード描画（シンプル） */
+    (function(){
+      const container = $('#photoCardsContainer');
+      photoCardsData.forEach(item=>{
+        const d = document.createElement('article');
+        d.className = 'photo-card';
+        d.innerHTML = `<img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.title)}"><div class="memory-card-content"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.desc)}</p></div>`;
+        container.appendChild(d);
+      });
+    })();
 
-    // KMLから思い出カードを生成
-    fetch('https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1&cid=mp&cv=G1AlQdVXWkg.ja.')
-      .then(res => res.text())
-      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-      .then(kml => {
-        const placemarks = kml.querySelectorAll('Placemark');
-        const container = document.getElementById('cardsContainer');
-        placemarks.forEach(pm => {
-          const name = pm.querySelector('name')?.textContent || '名称不明';
-          const desc = pm.querySelector('description')?.textContent || '説明なし';
-          const card = document.createElement('div');
+    /* KML -> カード生成（XSS対策でテキスト挿入、CORSに注意） */
+    (function(){
+      const kmlUrl = 'https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1';
+      fetch(kmlUrl).then(r=>r.text()).then(txt=>{
+        const doc = new DOMParser().parseFromString(txt,'text/xml');
+        const placemarks = doc.querySelectorAll('Placemark');
+        const container = $('#cardsContainer');
+        if(!placemarks.length) return;
+        placemarks.forEach(pm=>{
+          const name = escapeHtml(pm.querySelector('name')?.textContent || '名称不明');
+          const desc = escapeHtml(pm.querySelector('description')?.textContent || '説明なし');
+          const card = document.createElement('article');
           card.className = 'memory-card';
-          card.innerHTML = `
-            <div class="memory-card-content">
-              <h3>${name}</h3>
-              <p>${desc}</p>
-              <span>📍 My Mapsより</span>
-            </div>
-          `;
+          card.innerHTML = `<div class="memory-card-content"><h3>${name}</h3><p>${desc}</p><span>📍 My Mapsより</span></div>`;
           container.appendChild(card);
         });
-      })
-      .catch(err => console.error('KML読み込みエラー:', err));
+      }).catch(err=>{
+        console.warn('KML 読み込みエラー（CORS の可能性あり）:', err);
+      });
+    })();
+
+    /* 検索フィルター（タイトルで絞る） */
+    $('#searchInput').addEventListener('input', e=>{
+      const kw = e.target.value.trim().toLowerCase();
+      $$('.memory-card, .photo-card').forEach(card=>{
+        const t = (card.querySelector('h3')?.textContent || '').toLowerCase();
+        card.style.display = t.includes(kw) ? '' : 'none';
+      });
+    });
   </script>
 </body>
 </html>
