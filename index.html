@@ -33,10 +33,10 @@
     .search-bar{margin-bottom:24px}
     .search-bar input{width:100%;max-width:400px;padding:10px 12px;border:1px solid #ccc;border-radius:4px;font-size:.95rem}
 
-    /* カード全体をさらに小さく（従来の半分程度）に制限 */
+    /* カードをやや大きめ（前回の150pxから増やして約220px相当に） */
     .photo-cards,.memory-cards{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
       gap:20px;
       margin-bottom:40px;
       justify-items:center;
@@ -50,7 +50,7 @@
       transition:transform .18s,box-shadow .18s;
       text-align:left;
       width:100%;
-      max-width:150px; /* ここでカード幅を小さく（約半分）に設定 */
+      max-width:220px; /* ここでカード幅を少し大きめに設定 */
     }
     .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
 
@@ -61,9 +61,9 @@
       display:block;
     }
 
-    .memory-card-content,.photo-card .memory-card-content{padding:12px}
-    .photo-card h3,.memory-card h3{font-size:1rem;margin:0 0 6px}
-    .photo-card p,.memory-card p{color:var(--muted);font-size:.88rem;margin:0 0 8px}
+    .memory-card-content,.photo-card .memory-card-content{padding:14px}
+    .photo-card h3,.memory-card h3{font-size:1.05rem;margin:0 0 6px}
+    .photo-card p,.memory-card p{color:var(--muted);font-size:.92rem;margin:0 0 10px}
     .links-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
     .external-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:6px;font-weight:600;text-decoration:none}
     .external-link.secondary{background:#4a90e2}
@@ -94,8 +94,8 @@
       .font-size-selector{display:none}
       #fontToggle{display:inline-flex}
       .font-size-button{padding:3px 6px;font-size:.78rem}
-      .photo-cards,.memory-cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-      .photo-card,.memory-card{max-width:140px}
+      .photo-cards,.memory-cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+      .photo-card,.memory-card{max-width:180px}
     }
 
     @media(max-width:420px){
@@ -240,7 +240,7 @@
       ensureClass();
     })();
 
-    /* 写真カードデータ（例） - 画像名を 山口大学.jpg に変更 */
+    /* 写真カードデータ（例） - 画像名は assets/山口大学.jpg */
     const photoCardsData = [
       { img:'山口大学.jpg', title:'山口大学', desc:'山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにもガンガン挑戦中！' }
     ];
@@ -256,8 +256,7 @@
       });
     })();
 
-    /* KML -> カード生成（CORSに注意） 
-       エラー時はコンソールに出力のみ。検索で該当なしを表示する仕組みに統合するため、ここではエラーメッセージをUIに常時出さない */
+    /* KML -> カード生成（CORSに注意） */
     (function(){
       const kmlUrl = 'https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1';
       fetch(kmlUrl).then(r=>{
@@ -285,7 +284,6 @@
       const input = $('#searchInput');
       const cardsSelector = '.memory-card, .photo-card';
       const container = $('#cardsContainer');
-      const photoContainer = $('#photoCardsContainer');
 
       function clearNoResults() {
         const prev = document.querySelector('.no-results');
@@ -298,7 +296,6 @@
         msg.className = 'no-results';
         msg.id = 'noResultsMessage';
         msg.textContent = 'マップの場所が見つかりませんでした。';
-        // 挿入位置: memory-cards の直後（cardsContainer の中に表示）
         const parent = container.parentElement;
         if (parent) parent.insertBefore(msg, container.nextSibling);
       }
@@ -319,7 +316,6 @@
         const term = e.target.value;
         const visible = filterCards(term);
         clearNoResults();
-        // 検索語が空のときはメッセージを表示しない
         if (term.trim() !== '' && visible === 0) {
           showNoResults();
         }
