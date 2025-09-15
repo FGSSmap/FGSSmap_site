@@ -5,105 +5,125 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FGSSmap | 思い出の地図を見る</title>
   <meta name="google-site-verification" content="mcTa1rUBccaIuG2aw-ZKEvUvN-SuBy3gYi_vE9cPpps" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{--base:16px;--primary:#5c6bc0;--accent:#ff7043;--bg:#f9f9f9;--card:#fff;--text:#333;--muted:#777}
-    html{font-size:var(--base);scroll-behavior:smooth}
-    html.font-small{font-size:14px}html.font-medium{font-size:16px}html.font-large{font-size:18px}
-    body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;margin:0}
-    *{box-sizing:border-box}a{color:inherit;text-decoration:none}
-    .container{max-width:1000px;margin:0 auto;padding:0 20px}
-
-    header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:1000}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px;padding:0 12px}
-    .left-area,.center-area,.right-area{display:flex;align-items:center;gap:8px}
-    .font-size-selector{display:flex;gap:6px;align-items:center}
-    .font-size-button{background:none;border:2px solid #fff;border-radius:4px;color:#fff;padding:4px 8px;font-size:.9rem;cursor:pointer}
-    .font-size-button.active{background:#fff;color:var(--primary)}
-    .logo-title{display:flex;align-items:center;gap:10px;justify-content:center}
-    .logo-title img{width:40px;height:40px;object-fit:contain}
-    .site-title{font-size:1.2rem;font-weight:600}
-
-    #fontToggle{display:none;background:none;border:2px solid #fff;color:#fff;border-radius:6px;padding:6px 8px;font-weight:600;cursor:pointer}
-
-    .hero{background:linear-gradient(rgba(92,107,192,.8),rgba(92,107,192,.8)),url('hero-bg.jpg')center/cover no-repeat;color:#fff;text-align:center;padding:80px 20px}
-    .hero h1{font-size:2.5rem;margin:0 0 16px}section{margin-top:60px;text-align:center}
-    section h2{font-size:1.6rem;color:var(--primary);margin-bottom:24px}
-    .map-container iframe{width:100%;max-width:1000px;height:500px;border:none;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-    .search-bar{margin-bottom:24px}
-    .search-bar input{width:100%;max-width:400px;padding:10px 12px;border:1px solid #ccc;border-radius:4px;font-size:.95rem}
-
-    /* カードをやや大きめ（前回の指定） */
-    .photo-cards,.memory-cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:20px;
-      margin-bottom:40px;
-      justify-items:center;
+    :root{
+      --base:18px; /* ベースを大きめに調整（元は16） */
+      --primary:#5c6bc0;
+      --accent:#ff7043;
+      --bg:#f9f9f9;
+      --card:#ffffff;
+      --text:#333;
+      --muted:#777;
+      --shadow: 0 6px 20px rgba(20,20,40,0.08);
     }
 
+    html{font-size:var(--base);scroll-behavior:smooth}
+    html.font-small{font-size:15px}html.font-medium{font-size:18px}html.font-large{font-size:20px}
+    body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;margin:0;-webkit-font-smoothing:antialiased}
+    *{box-sizing:border-box}a{color:inherit;text-decoration:none}
+
+    .container{max-width:1000px;margin:0 auto;padding:0 20px}
+
+/* Header */
+    header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:1000;box-shadow: 0 4px 12px rgba(0,0,0,0.08)}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:12px;padding:0 12px} /* 高さも少し拡大 */
+    .left-area,.center-area,.right-area{display:flex;align-items:center;gap:10px}
+
+/* 左上ロゴとサイト名 */
+    .logo-title-left{display:flex;align-items:center;gap:12px}
+    .logo-title-left img{width:44px;height:44px;object-fit:contain;border-radius:6px}
+    /* FGSSmap タイトル（ポップフォント） */
+    .site-title{
+      font-family: 'Fredoka', 'Montserrat', sans-serif;
+      font-weight:700;
+      font-size:1.15rem; /* 少し大きめ */
+      color:#fff;
+      letter-spacing:0.6px;
+      display:inline-block;
+      transform: translateY(-1px);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+/* フォントコントロール */
+    .font-controls{display:flex;align-items:center;gap:8px}
+    #fontToggle{display:none;background:none;border:2px solid rgba(255,255,255,0.12);color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
+    .font-size-selector{display:flex;gap:6px;align-items:center}
+    .font-size-button{background:transparent;border:2px solid #fff;border-radius:6px;color:#fff;padding:6px 10px;font-size:.95rem;cursor:pointer}
+    .font-size-button.active{background:#fff;color:var(--primary)}
+
+/* Hero */
+    .hero{color:#fff;text-align:center;padding:84px 20px;background:linear-gradient(rgba(92,107,192,.85),rgba(92,107,192,.85))}
+    .hero .container{position:relative;z-index:2}
+    .hero h1{font-size:2.5rem;margin:0 0 12px;font-weight:700} /* 大きめ */
+    .hero p{margin:0 auto;max-width:780px;color:rgba(255,255,255,0.95);font-size:1.05rem}
+
+/* Sections */
+    section{margin-top:40px;text-align:center}
+    section h2{font-size:1.45rem;color:var(--primary);margin-bottom:18px}
+
+/* Map */
+    .map-container{margin:0 auto;max-width:1000px;position:relative}
+    .map-container iframe{width:100%;height:460px;border-radius:8px;border:none;box-shadow:var(--shadow)} /* 高さをやや拡大 */
+    #mapDesc{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+
+/* Search */
+    .search-bar{margin-bottom:20px}
+    .search-bar input{width:100%;max-width:460px;padding:14px 16px;border:1px solid #ccc;border-radius:10px;font-size:1rem;background:#fff}
+
+/* Cards grid */
+    .photo-cards,.memory-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-bottom:40px;justify-items:center;align-items:start}
+
+/* Card styles */
     .photo-card,.memory-card{
       background:var(--card);
-      border-radius:8px;
+      border-radius:12px;
       overflow:hidden;
-      box-shadow:0 2px 8px rgba(0,0,0,.1);
+      box-shadow:0 8px 22px rgba(0,0,0,0.06);
       transition:transform .18s,box-shadow .18s;
       text-align:left;
       width:100%;
-      max-width:220px;
+      max-width:300px;
+      position:relative;
+      border:1px solid rgba(0,0,0,0.04);
     }
-    .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
+    .photo-card:hover,.memory-card:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(0,0,0,0.08)}
 
-    /* 画像は幅100% 高さ自動で縦横比を維持 */
-    .photo-card img{
-      width:100%;
-      height:auto;
-      display:block;
-    }
+/* image wrapper to preserve ratio */
+    .photo-card .img-wrap{width:100%;display:block;background:transparent}
+    .photo-card img{width:100%;height:auto;display:block;object-fit:cover}
 
-    .memory-card-content,.photo-card .memory-card-content{padding:14px}
-    .photo-card h3,.memory-card h3{font-size:1.05rem;margin:0 0 6px}
-    .photo-card p,.memory-card p{color:var(--muted);font-size:.92rem;margin:0 0 10px}
+/* badge */
+    .badge{position:absolute;right:12px;top:12px;background:var(--accent);color:#fff;padding:7px 10px;border-radius:8px;font-weight:700;font-size:.88rem}
+
+    .memory-card-content,.photo-card .memory-card-content{padding:16px}
+    .photo-card h3,.memory-card h3{font-size:1.15rem;margin:0 0 8px}
+    .photo-card p,.memory-card p{color:var(--muted);font-size:1rem;margin:0 0 10px}
+
     .links-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-    .external-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:6px;font-weight:600;text-decoration:none}
+    .external-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;text-decoration:none}
     .external-link.secondary{background:#4a90e2}
-    .insta-link{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:4px;font-weight:600}
-    footer{background:#eee;color:#555;text-align:center;padding:20px;margin-top:60px;font-size:.85rem}
-    #toTop{position:fixed;right:30px;bottom:30px;display:none;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:4px;cursor:pointer;font-size:1.2rem;z-index:100}
 
-    /* フォーカス可視化 */
-    .font-size-button:focus, #fontToggle:focus, .external-link:focus, .photo-card:focus, .memory-card:focus {
-      outline:3px solid rgba(92,107,192,0.25);
-      outline-offset:2px;
-    }
+/* no-results center */
+    .no-results {grid-column: 1 / -1;max-width: 680px;background: transparent;color: var(--muted);text-align: center;padding: 10px 12px;justify-self: center;margin: 0 auto;font-weight:600;border-radius:8px}
 
-    /* 検索で該当なしメッセージ（中央揃えに調整） */
-    .no-results {
-      grid-column: 1 / -1;
-      max-width: 600px;
-      background: transparent;
-      color: var(--muted);
-      text-align: center;       /* テキストを中央揃え */
-      padding: 8px 12px;
-      justify-self: center;     /* グリッド内で要素自体を中央寄せ */
-      margin: 0 auto;           /* 念のため左右マージンで中央に */
-    }
+/* focus states */
+    .font-size-button:focus, #fontToggle:focus, .external-link:focus, .photo-card:focus, .memory-card:focus {outline:3px solid rgba(92,107,192,0.18);outline-offset:4px}
 
+/* responsive tweaks */
     @media(max-width:760px){
-      .nav{height:56px;padding:0 10px}
-      .logo-title img{width:36px;height:36px}
-      .site-title{font-size:1rem}
-      .font-size-selector{display:none}
+      .nav{height:64px;padding:0 10px}
+      .logo-title-left img{width:40px;height:40px}
+      .site-title{font-size:1.05rem}
       #fontToggle{display:inline-flex}
-      .font-size-button{padding:3px 6px;font-size:.78rem}
-      .photo-cards,.memory-cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-      .photo-card,.memory-card{max-width:180px}
+      .font-size-selector{display:none}
+      .photo-cards,.memory-cards{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+      .photo-card,.memory-card{max-width:260px}
+      .hero{padding:56px 16px}
+      .hero h1{font-size:2rem}
     }
-
     @media(max-width:420px){
-      .hero{padding:56px 12px}
       .hero h1{font-size:1.6rem}
-      .photo-card img{height:auto}
       .photo-card,.memory-card{max-width:100%}
     }
   </style>
@@ -111,27 +131,26 @@
 <body>
   <header>
     <div class="container nav" role="navigation" aria-label="メインナビゲーション">
-      <div class="left-area">
-        <button id="fontToggle" tabindex="0" aria-expanded="false" aria-controls="fontSelector" aria-label="フォントサイズ切替">A</button>
-
-        <div class="font-size-selector" id="fontSelector" role="toolbar" aria-label="フォントサイズ">
-          <button class="font-size-button" data-size="small" aria-pressed="false">小</button>
-          <button class="font-size-button active" data-size="medium" aria-pressed="true">中</button>
-          <button class="font-size-button" data-size="large" aria-pressed="false">大</button>
-        </div>
-      </div>
-
-      <div class="center-area" style="flex:1;justify-content:center">
-        <div class="logo-title" aria-hidden="false">
-          <a href="/" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;">
+      <div class="left-area" style="align-items:center;">
+        <div class="logo-title-left" aria-hidden="false">
+          <a href="/" style="display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;">
             <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ">
             <span class="site-title">FGSSmap</span>
           </a>
         </div>
       </div>
 
-      <div class="right-area">
-        <!-- 右側は空 -->
+      <div class="center-area" style="flex:1;justify-content:center"></div>
+
+      <div class="right-area" style="align-items:center;">
+        <div class="font-controls" aria-hidden="false">
+          <button id="fontToggle" aria-expanded="false" aria-controls="fontSelector" aria-label="フォントサイズ切替">A</button>
+          <div class="font-size-selector" id="fontSelector" role="toolbar" aria-label="フォントサイズ">
+            <button class="font-size-button" data-size="small" aria-pressed="false">小</button>
+            <button class="font-size-button active" data-size="medium" aria-pressed="true">中</button>
+            <button class="font-size-button" data-size="large" aria-pressed="false">大</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -140,7 +159,7 @@
     <div class="hero">
       <div class="container">
         <h1>みんなの思い出を地図に刻もう</h1>
-        <p>大学生活のワクワクを、FGSSmapでいつでも振り返ろう。</p>
+        <p>大学生活のワクワクを、FGSSmapでいつでも振り返ろう。写真や場所をみんなで共有して、つながりを深めよう。</p>
       </div>
     </div>
 
@@ -149,7 +168,7 @@
         <h2>🗺️ 思い出マップ</h2>
         <div class="map-container" aria-live="polite" style="position:relative;">
           <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13" loading="lazy" title="思い出マップ" aria-describedby="mapDesc"></iframe>
-          <div id="mapDesc" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">大学周辺で共有された思い出の位置情報を表示する埋め込みマップです</div>
+          <div id="mapDesc">大学周辺で共有された思い出の位置情報を表示する埋め込みマップです</div>
         </div>
       </div>
     </section>
@@ -171,21 +190,21 @@
         <h2>🎓 運営団体について</h2>
         <p>このプロジェクトは、山口大学国際総合科学部公認サークル <strong>Palet's</strong> によって運営されています。思い出を形にし、みんなで共有することで、つながりを深めます。</p>
 
-      <div class="links-row" role="navigation" aria-label="外部リンク">
-        <a class="external-link" href="https://www.instagram.com/palets_fgss/" target="_blank" rel="noopener noreferrer" aria-label="Palet's Instagram">📸 Instagram</a>
-        <a class="external-link secondary" href="https://www.yamaguchi-u.ac.jp/gss/index.html" target="_blank" rel="noopener noreferrer" aria-label="山口大学国際総合科学部 公式サイト">🎓 山口大学 国際総合科学部</a>
-      </div>
+        <div class="links-row" role="navigation" aria-label="外部リンク" style="margin-top:12px">
+          <a class="external-link" href="https://www.instagram.com/palets_fgss/" target="_blank" rel="noopener noreferrer" aria-label="Palet's Instagram" style="background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600">📸 Instagram</a>
+          <a class="external-link secondary" href="https://www.yamaguchi-u.ac.jp/gss/index.html" target="_blank" rel="noopener noreferrer" aria-label="山口大学国際総合科学部 公式サイト" style="background:#4a90e2;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600">🎓 山口大学 国際総合科学部</a>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2025 Palet's. All rights reserved.</p>
+    <div class="container" style="padding:20px;">
+      <p style="margin:0;color:var(--muted);font-size:0.98rem">&copy; 2025 Palet's. All rights reserved.</p>
     </div>
   </footer>
 
-  <button id="toTop" aria-label="トップに戻る">↑</button>
+  <button id="toTop" aria-label="トップに戻る" style="position:fixed;right:30px;bottom:30px;display:none;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:1.1rem;z-index:100">↑</button>
 
   <script>
     const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
@@ -212,13 +231,16 @@
 
       const setSelectorVisible = visible => {
         selector.style.display = visible ? 'flex' : 'none';
-        toggle.setAttribute('aria-expanded', String(visible));
+        if (toggle) toggle.setAttribute('aria-expanded', String(visible));
       };
-      toggle.addEventListener('click', ()=> setSelectorVisible(getComputedStyle(selector).display === 'none'));
-      toggle.addEventListener('keydown', e=>{
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
-        if (e.key === 'ArrowDown') { e.preventDefault(); btns[0].focus(); setSelectorVisible(true); }
-      });
+
+      if (toggle) {
+        toggle.addEventListener('click', ()=> setSelectorVisible(getComputedStyle(selector).display === 'none'));
+        toggle.addEventListener('keydown', e=>{
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); btns[0].focus(); setSelectorVisible(true); }
+        });
+      }
 
       const saved = (()=>{try{return localStorage.getItem('fgss_font_size')}catch(e){return null}})();
       apply(saved || 'medium');
@@ -244,7 +266,7 @@
 
     /* 写真カードデータ（例） - 画像名は assets/山口大学.jpg */
     const photoCardsData = [
-      { img:'山口大学.jpg', title:'山口大学', desc:'山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにもガンガン挑戦中！' }
+      { img:'山口大学.jpg', title:'山口大学', desc:'山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにも挑戦中！', badge: '大学' }
     ];
 
     /* 写真カード描画 */
@@ -253,7 +275,15 @@
       photoCardsData.forEach(item=>{
         const d = document.createElement('article'); d.className='photo-card';
         d.setAttribute('role','listitem');
-        d.innerHTML = `<img src="${item.img}" alt="${item.title}"><div class="memory-card-content"><h3>${item.title}</h3><p>${item.desc}</p></div>`;
+        d.innerHTML = `
+          <div class="img-wrap">
+            <img src="${item.img}" alt="${item.title}">
+          </div>
+          <div class="badge">${item.badge || '写真'}</div>
+          <div class="memory-card-content">
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+          </div>`;
         container.appendChild(d);
       });
     })();
@@ -273,7 +303,7 @@
           const name = (pm.querySelector('name')?.textContent || '名称不明');
           const desc = (pm.querySelector('description')?.textContent || '説明なし');
           const card = document.createElement('article'); card.className='memory-card'; card.setAttribute('role','listitem');
-          card.innerHTML = `<div class="memory-card-content"><h3>${name}</h3><p>${desc}</p><span>📍 My Mapsより</span></div>`;
+          card.innerHTML = `<div class="memory-card-content"><h3>${name}</h3><p>${desc}</p></div>`;
           container.appendChild(card);
         });
       }).catch(err=>{
@@ -314,14 +344,16 @@
         return visibleCount;
       }
 
-      input.addEventListener('input', e=>{
-        const term = e.target.value;
-        const visible = filterCards(term);
-        clearNoResults();
-        if (term.trim() !== '' && visible === 0) {
-          showNoResults();
-        }
-      });
+      if (input) {
+        input.addEventListener('input', e=>{
+          const term = e.target.value;
+          const visible = filterCards(term);
+          clearNoResults();
+          if (term.trim() !== '' && visible === 0) {
+            showNoResults();
+          }
+        });
+      }
     })();
   </script>
 </body>
