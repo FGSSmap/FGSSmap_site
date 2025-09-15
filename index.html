@@ -1,4 +1,4 @@
-a<!doctype html>
+<!doctype html>
 <html lang="ja" class="font-medium">
 <head>
   <meta charset="utf-8" />
@@ -35,7 +35,7 @@ a<!doctype html>
     .photo-cards,.memory-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-bottom:40px}
     .photo-card,.memory-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:transform .18s,box-shadow .18s;text-align:left}
     .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
-    .photo-card img{width:100%;height:140px;object-fit:cover}
+    .photo-card img{width:100%;height:auto;display:block} /* 元の縦横比を維持する設定 */
     .memory-card-content,.photo-card .memory-card-content{padding:16px}
     .photo-card h3,.memory-card h3{font-size:1.1rem;margin:0 0 8px}
     .photo-card p,.memory-card p{color:var(--muted);font-size:.95rem;margin:0 0 12px}
@@ -45,6 +45,12 @@ a<!doctype html>
     .insta-link{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:4px;font-weight:600}
     footer{background:#eee;color:#555;text-align:center;padding:20px;margin-top:60px;font-size:.85rem}
     #toTop{position:fixed;right:30px;bottom:30px;display:none;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:4px;cursor:pointer;font-size:1.2rem;z-index:100}
+
+    /* フォーカス可視化 */
+    .font-size-button:focus, #fontToggle:focus, .external-link:focus, .photo-card:focus, .memory-card:focus {
+      outline:3px solid rgba(92,107,192,0.25);
+      outline-offset:2px;
+    }
 
     @media(max-width:760px){
       .nav{height:56px;padding:0 10px}
@@ -58,7 +64,7 @@ a<!doctype html>
     @media(max-width:420px){
       .hero{padding:56px 12px}
       .hero h1{font-size:1.6rem}
-      .photo-card img{height:120px}
+      .photo-card img{height:auto}
     }
   </style>
 </head>
@@ -66,7 +72,7 @@ a<!doctype html>
   <header>
     <div class="container nav" role="navigation" aria-label="メインナビゲーション">
       <div class="left-area">
-        <button id="fontToggle" aria-expanded="false" aria-controls="fontSelector" aria-label="フォントサイズ切替">A</button>
+        <button id="fontToggle" tabindex="0" aria-expanded="false" aria-controls="fontSelector" aria-label="フォントサイズ切替">A</button>
 
         <div class="font-size-selector" id="fontSelector" role="toolbar" aria-label="フォントサイズ">
           <button class="font-size-button" data-size="small" aria-pressed="false">小</button>
@@ -77,8 +83,10 @@ a<!doctype html>
 
       <div class="center-area" style="flex:1;justify-content:center">
         <div class="logo-title" aria-hidden="false">
-          <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ">
-          <span class="site-title">FGSSmap</span>
+          <a href="/" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;">
+            <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ">
+            <span class="site-title">FGSSmap</span>
+          </a>
         </div>
       </div>
 
@@ -100,7 +108,8 @@ a<!doctype html>
       <div class="container">
         <h2>🗺️ 思い出マップ</h2>
         <div class="map-container" aria-live="polite">
-          <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13" loading="lazy" title="思い出マップ"></iframe>
+          <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13" loading="lazy" title="思い出マップ" aria-describedby="mapDesc"></iframe>
+          <div id="mapDesc" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">大学周辺で共有された思い出の位置情報を表示する埋め込みマップです</div>
         </div>
       </div>
     </section>
@@ -109,11 +118,11 @@ a<!doctype html>
       <div class="container">
         <h2>📍 思い出の場所一覧</h2>
         <div class="search-bar">
-          <input id="searchInput" type="search" placeholder="場所名で検索…" aria-controls="cardsContainer photoCardsContainer">
+          <input id="searchInput" type="search" placeholder="場所名で検索…" aria-label="場所名で検索" aria-controls="cardsContainer photoCardsContainer">
         </div>
 
-        <div class="photo-cards" id="photoCardsContainer" aria-live="polite"></div>
-        <div class="memory-cards" id="cardsContainer" aria-live="polite"></div>
+        <div class="photo-cards" id="photoCardsContainer" aria-live="polite" role="list"></div>
+        <div class="memory-cards" id="cardsContainer" aria-live="polite" role="list"></div>
       </div>
     </section>
 
@@ -144,36 +153,54 @@ a<!doctype html>
     /* フォントサイズ切替（保存） */
     (function(){
       const btns = $$('.font-size-button');
+      const toggle = $('#fontToggle');
+      const selector = $('#fontSelector');
+
       const apply = size => {
         document.documentElement.classList.remove('font-small','font-medium','font-large');
         document.documentElement.classList.add(size==='small'?'font-small':size==='large'?'font-large':'font-medium');
         btns.forEach(b=>{ const on = b.dataset.size===size; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on); });
         try{ localStorage.setItem('fgss_font_size', size); }catch(e){}
       };
-      btns.forEach(b=>b.addEventListener('click', ()=> apply(b.dataset.size)));
+
+      btns.forEach(b=>{
+        b.addEventListener('click', ()=> apply(b.dataset.size));
+        b.addEventListener('keydown', e=>{
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); }
+        });
+      });
+
+      const setSelectorVisible = visible => {
+        selector.style.display = visible ? 'flex' : 'none';
+        toggle.setAttribute('aria-expanded', String(visible));
+      };
+      toggle.addEventListener('click', ()=> setSelectorVisible(getComputedStyle(selector).display === 'none'));
+      toggle.addEventListener('keydown', e=>{
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); btns[0].focus(); setSelectorVisible(true); }
+      });
+
       const saved = (()=>{try{return localStorage.getItem('fgss_font_size')}catch(e){return null}})();
       apply(saved || 'medium');
-    })();
 
-    /* モバイル用フォントトグル（Aボタン） */
-    (function(){
-      const toggle = $('#fontToggle');
-      const selector = $('#fontSelector');
-      toggle.addEventListener('click', ()=>{
-        const isHidden = getComputedStyle(selector).display === 'none';
-        selector.style.display = isHidden ? 'flex' : 'none';
-        toggle.setAttribute('aria-expanded', String(isHidden));
-      });
+      let rto;
       window.addEventListener('resize', ()=>{
-        if (window.innerWidth > 760) selector.style.display = '';
+        clearTimeout(rto);
+        rto = setTimeout(()=>{ if (window.innerWidth > 760) selector.style.display = ''; }, 150);
       });
     })();
 
     /* Back to top */
     (function(){
       const toTop = $('#toTop');
-      window.addEventListener('scroll', ()=> toTop.style.display = window.pageYOffset > 300 ? 'block' : 'none');
+      const showClass = 'visible';
+      const ensureClass = () => {
+        if (window.pageYOffset > 300) toTop.style.display = 'block';
+        else toTop.style.display = 'none';
+      };
+      window.addEventListener('scroll', () => ensureClass());
       toTop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+      ensureClass();
     })();
 
     /* 写真カードデータ（例） */
@@ -186,6 +213,7 @@ a<!doctype html>
       const container = $('#photoCardsContainer');
       photoCardsData.forEach(item=>{
         const d = document.createElement('article'); d.className='photo-card';
+        // 画像は幅100% 高さ自動で元の縦横比を保つ
         d.innerHTML = `<img src="${item.img}" alt="${item.title}"><div class="memory-card-content"><h3>${item.title}</h3><p>${item.desc}</p></div>`;
         container.appendChild(d);
       });
@@ -194,11 +222,19 @@ a<!doctype html>
     /* KML -> カード生成（CORSに注意） */
     (function(){
       const kmlUrl = 'https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1';
-      fetch(kmlUrl).then(r=>r.text()).then(txt=>{
+      fetch(kmlUrl).then(r=>{
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      }).then(txt=>{
         const doc = new DOMParser().parseFromString(txt,'text/xml');
         const placemarks = doc.querySelectorAll('Placemark');
         const container = $('#cardsContainer');
-        if(!placemarks.length) return;
+        if(!placemarks.length) {
+          const msg = document.createElement('p');
+          msg.textContent = 'マップの場所が見つかりませんでした。';
+          container.appendChild(msg);
+          return;
+        }
         placemarks.forEach(pm=>{
           const name = (pm.querySelector('name')?.textContent || '名称不明');
           const desc = (pm.querySelector('description')?.textContent || '説明なし');
@@ -206,7 +242,15 @@ a<!doctype html>
           card.innerHTML = `<div class="memory-card-content"><h3>${name}</h3><p>${desc}</p><span>📍 My Mapsより</span></div>`;
           container.appendChild(card);
         });
-      }).catch(err=>console.warn('KML 読み込みエラー（CORS の可能性あり）:', err));
+      }).catch(err=>{
+        console.warn('KML 読み込みエラー（CORS の可能性あり）:', err);
+        const container = $('#cardsContainer');
+        const msg = document.createElement('div');
+        msg.setAttribute('role','status');
+        msg.className = 'memory-card';
+        msg.innerHTML = `<div class="memory-card-content"><h3>マップを読み込めませんでした</h3><p>公開設定またはブラウザの制限でマップを取得できませんでした。運営側でサーバプロキシを用意するか、KML を同一オリジンに置いてください。</p></div>`;
+        container.appendChild(msg);
+      });
     })();
 
     /* 検索フィルター */
