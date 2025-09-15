@@ -41,6 +41,9 @@
     .memory-card-content,.photo-card .memory-card-content{padding:16px}
     .photo-card h3,.memory-card h3{font-size:1.1rem;margin:0 0 8px}
     .photo-card p,.memory-card p{color:var(--muted);font-size:.95rem;margin:0 0 12px}
+    .links-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+    .external-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:6px;font-weight:600;text-decoration:none}
+    .external-link.secondary{background:#4a90e2}
     .insta-link{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:4px;font-weight:600}
     footer{background:#eee;color:#555;text-align:center;padding:20px;margin-top:60px;font-size:.85rem}
     #toTop{position:fixed;right:30px;bottom:30px;display:none;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:4px;cursor:pointer;font-size:1.2rem;z-index:100}
@@ -77,7 +80,7 @@
 
       <div class="center-area" style="flex:1;justify-content:center">
         <div class="logo-title" aria-hidden="false">
-          <img src="FGSSmap-icon.png.png" alt="FGSSmapロゴ">
+          <img src="FGSSmap-icon.png" alt="FGSSmapロゴ">
           <span class="site-title">FGSSmap</span>
         </div>
       </div>
@@ -121,7 +124,18 @@
       <div class="container organization">
         <h2>🎓 運営団体について</h2>
         <p>このプロジェクトは、山口大学国際総合科学部公認サークル <strong>Palet's</strong> によって運営されています。思い出を形にし、みんなで共有することで、つながりを深めます。</p>
-        <a class="insta-link" href="https://www.instagram.com/palets_fgss/" target="_blank" rel="noopener">Instagramで活動を見る</a>
+
+        <!-- リンクボタン群：Instagram と 山口大学公式サイト -->
+        <div class="links-row" role="navigation" aria-label="外部リンク">
+          <a class="external-link" href="https://www.instagram.com/palets_fgss/" target="_blank" rel="noopener noreferrer" aria-label="Palet's Instagram">
+            📸 Instagram
+          </a>
+
+          <!-- ここが追加した山口大学へのボタン -->
+          <a class="external-link secondary" href="https://www.yamaguchi-u.ac.jp/gss/index.html" target="_blank" rel="noopener noreferrer" aria-label="山口大学国際総合科学部 公式サイト">
+            🎓 山口大学 国際総合科学部
+          </a>
+        </div>
       </div>
     </section>
   </main>
