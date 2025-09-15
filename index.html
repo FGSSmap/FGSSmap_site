@@ -32,13 +32,38 @@
     .map-container iframe{width:100%;max-width:1000px;height:500px;border:none;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
     .search-bar{margin-bottom:24px}
     .search-bar input{width:100%;max-width:400px;padding:10px 12px;border:1px solid #ccc;border-radius:4px;font-size:.95rem}
-    .photo-cards,.memory-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-bottom:40px}
-    .photo-card,.memory-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:transform .18s,box-shadow .18s;text-align:left}
+
+    /* カード全体をさらに小さく（従来の半分程度）に制限 */
+    .photo-cards,.memory-cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:20px;
+      margin-bottom:40px;
+      justify-items:center;
+    }
+
+    .photo-card,.memory-card{
+      background:var(--card);
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:0 2px 8px rgba(0,0,0,.1);
+      transition:transform .18s,box-shadow .18s;
+      text-align:left;
+      width:100%;
+      max-width:150px; /* ここでカード幅を小さく（約半分）に設定 */
+    }
     .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
-    .photo-card img{width:100%;height:auto;display:block} /* 元の縦横比を維持する設定 */
-    .memory-card-content,.photo-card .memory-card-content{padding:16px}
-    .photo-card h3,.memory-card h3{font-size:1.1rem;margin:0 0 8px}
-    .photo-card p,.memory-card p{color:var(--muted);font-size:.95rem;margin:0 0 12px}
+
+    /* 画像は幅100% 高さ自動で縦横比を維持 */
+    .photo-card img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .memory-card-content,.photo-card .memory-card-content{padding:12px}
+    .photo-card h3,.memory-card h3{font-size:1rem;margin:0 0 6px}
+    .photo-card p,.memory-card p{color:var(--muted);font-size:.88rem;margin:0 0 8px}
     .links-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
     .external-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:6px;font-weight:600;text-decoration:none}
     .external-link.secondary{background:#4a90e2}
@@ -52,6 +77,16 @@
       outline-offset:2px;
     }
 
+    /* 検索で該当なしメッセージ */
+    .no-results {
+      grid-column: 1/-1;
+      max-width:600px;
+      background:transparent;
+      color:var(--muted);
+      text-align:center;
+      padding:8px 12px;
+    }
+
     @media(max-width:760px){
       .nav{height:56px;padding:0 10px}
       .logo-title img{width:36px;height:36px}
@@ -59,12 +94,15 @@
       .font-size-selector{display:none}
       #fontToggle{display:inline-flex}
       .font-size-button{padding:3px 6px;font-size:.78rem}
+      .photo-cards,.memory-cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+      .photo-card,.memory-card{max-width:140px}
     }
 
     @media(max-width:420px){
       .hero{padding:56px 12px}
       .hero h1{font-size:1.6rem}
       .photo-card img{height:auto}
+      .photo-card,.memory-card{max-width:100%}
     }
   </style>
 </head>
@@ -107,7 +145,7 @@
     <section id="map">
       <div class="container">
         <h2>🗺️ 思い出マップ</h2>
-        <div class="map-container" aria-live="polite">
+        <div class="map-container" aria-live="polite" style="position:relative;">
           <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&hl=ja&ll=34.12382662506017,131.43323404999998&z=13" loading="lazy" title="思い出マップ" aria-describedby="mapDesc"></iframe>
           <div id="mapDesc" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">大学周辺で共有された思い出の位置情報を表示する埋め込みマップです</div>
         </div>
@@ -193,7 +231,6 @@
     /* Back to top */
     (function(){
       const toTop = $('#toTop');
-      const showClass = 'visible';
       const ensureClass = () => {
         if (window.pageYOffset > 300) toTop.style.display = 'block';
         else toTop.style.display = 'none';
@@ -203,7 +240,7 @@
       ensureClass();
     })();
 
-    /* 写真カードデータ（例） */
+    /* 写真カードデータ（例） - 画像名を 山口大学.jpg に変更 */
     const photoCardsData = [
       { img:'山口大学.jpg', title:'山口大学', desc:'山口大学は山口県にある国立大。吉田・常盤・小串の３キャンパスで文系・理系・医学・国際総合科学まで幅広く学べ、約１万人の学生が地域連携やSDGsにもガンガン挑戦中！' }
     ];
@@ -213,13 +250,14 @@
       const container = $('#photoCardsContainer');
       photoCardsData.forEach(item=>{
         const d = document.createElement('article'); d.className='photo-card';
-        // 画像は幅100% 高さ自動で元の縦横比を保つ
+        d.setAttribute('role','listitem');
         d.innerHTML = `<img src="${item.img}" alt="${item.title}"><div class="memory-card-content"><h3>${item.title}</h3><p>${item.desc}</p></div>`;
         container.appendChild(d);
       });
     })();
 
-    /* KML -> カード生成（CORSに注意） */
+    /* KML -> カード生成（CORSに注意） 
+       エラー時はコンソールに出力のみ。検索で該当なしを表示する仕組みに統合するため、ここではエラーメッセージをUIに常時出さない */
     (function(){
       const kmlUrl = 'https://www.google.com/maps/d/kml?hl=ja&mid=1nTgYFWkXf1UQHwGZCwdXuRv-aopgUkY&nl=1&forcekml=1';
       fetch(kmlUrl).then(r=>{
@@ -229,38 +267,64 @@
         const doc = new DOMParser().parseFromString(txt,'text/xml');
         const placemarks = doc.querySelectorAll('Placemark');
         const container = $('#cardsContainer');
-        if(!placemarks.length) {
-          const msg = document.createElement('p');
-          msg.textContent = 'マップの場所が見つかりませんでした。';
-          container.appendChild(msg);
-          return;
-        }
+        if(!placemarks.length) return;
         placemarks.forEach(pm=>{
           const name = (pm.querySelector('name')?.textContent || '名称不明');
           const desc = (pm.querySelector('description')?.textContent || '説明なし');
-          const card = document.createElement('article'); card.className='memory-card';
+          const card = document.createElement('article'); card.className='memory-card'; card.setAttribute('role','listitem');
           card.innerHTML = `<div class="memory-card-content"><h3>${name}</h3><p>${desc}</p><span>📍 My Mapsより</span></div>`;
           container.appendChild(card);
         });
       }).catch(err=>{
         console.warn('KML 読み込みエラー（CORS の可能性あり）:', err);
-        const container = $('#cardsContainer');
-        const msg = document.createElement('div');
-        msg.setAttribute('role','status');
-        msg.className = 'memory-card';
-        msg.innerHTML = `<div class="memory-card-content"><h3>マップを読み込めませんでした</h3><p>公開設定またはブラウザの制限でマップを取得できませんでした。運営側でサーバプロキシを用意するか、KML を同一オリジンに置いてください。</p></div>`;
-        container.appendChild(msg);
       });
     })();
 
-    /* 検索フィルター */
-    $('#searchInput').addEventListener('input', e=>{
-      const kw = e.target.value.trim().toLowerCase();
-      $$('.memory-card, .photo-card').forEach(card=>{
-        const t = (card.querySelector('h3')?.textContent || '').toLowerCase();
-        card.style.display = t.includes(kw) ? '' : 'none';
+    /* 検索フィルター（該当なしの表示は検索実行時のみ） */
+    (function(){
+      const input = $('#searchInput');
+      const cardsSelector = '.memory-card, .photo-card';
+      const container = $('#cardsContainer');
+      const photoContainer = $('#photoCardsContainer');
+
+      function clearNoResults() {
+        const prev = document.querySelector('.no-results');
+        if (prev) prev.remove();
+      }
+
+      function showNoResults() {
+        clearNoResults();
+        const msg = document.createElement('div');
+        msg.className = 'no-results';
+        msg.id = 'noResultsMessage';
+        msg.textContent = 'マップの場所が見つかりませんでした。';
+        // 挿入位置: memory-cards の直後（cardsContainer の中に表示）
+        const parent = container.parentElement;
+        if (parent) parent.insertBefore(msg, container.nextSibling);
+      }
+
+      function filterCards(term) {
+        const kw = term.trim().toLowerCase();
+        let visibleCount = 0;
+        $$(cardsSelector).forEach(card=>{
+          const t = (card.querySelector('h3')?.textContent || '').toLowerCase();
+          const matches = kw === '' || t.includes(kw);
+          card.style.display = matches ? '' : 'none';
+          if (matches) visibleCount++;
+        });
+        return visibleCount;
+      }
+
+      input.addEventListener('input', e=>{
+        const term = e.target.value;
+        const visible = filterCards(term);
+        clearNoResults();
+        // 検索語が空のときはメッセージを表示しない
+        if (term.trim() !== '' && visible === 0) {
+          showNoResults();
+        }
       });
-    });
+    })();
   </script>
 </body>
 </html>
