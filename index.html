@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --base:18px; /* ベースを大きめに調整（元は16） */
+      --base:18px;
       --primary:#5c6bc0;
       --accent:#ff7043;
       --bg:#f9f9f9;
@@ -27,17 +27,16 @@
 
 /* Header */
     header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:1000;box-shadow: 0 4px 12px rgba(0,0,0,0.08)}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:12px;padding:0 12px} /* 高さも少し拡大 */
+    .nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:12px;padding:0 12px}
     .left-area,.center-area,.right-area{display:flex;align-items:center;gap:10px}
 
 /* 左上ロゴとサイト名 */
     .logo-title-left{display:flex;align-items:center;gap:12px}
     .logo-title-left img{width:44px;height:44px;object-fit:contain;border-radius:6px}
-    /* FGSSmap タイトル（ポップフォント） */
     .site-title{
       font-family: 'Fredoka', 'Montserrat', sans-serif;
       font-weight:700;
-      font-size:1.15rem; /* 少し大きめ */
+      font-size:1.15rem;
       color:#fff;
       letter-spacing:0.6px;
       display:inline-block;
@@ -55,7 +54,7 @@
 /* Hero */
     .hero{color:#fff;text-align:center;padding:84px 20px;background:linear-gradient(rgba(92,107,192,.85),rgba(92,107,192,.85))}
     .hero .container{position:relative;z-index:2}
-    .hero h1{font-size:2.5rem;margin:0 0 12px;font-weight:700} /* 大きめ */
+    .hero h1{font-size:2.5rem;margin:0 0 12px;font-weight:700}
     .hero p{margin:0 auto;max-width:780px;color:rgba(255,255,255,0.95);font-size:1.05rem}
 
 /* Sections */
@@ -64,7 +63,7 @@
 
 /* Map */
     .map-container{margin:0 auto;max-width:1000px;position:relative}
-    .map-container iframe{width:100%;height:460px;border-radius:8px;border:none;box-shadow:var(--shadow)} /* 高さをやや拡大 */
+    .map-container iframe{width:100%;height:460px;border-radius:8px;border:none;box-shadow:var(--shadow)}
     #mapDesc{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 
 /* Search */
@@ -106,6 +105,11 @@
 
 /* no-results center */
     .no-results {grid-column: 1 / -1;max-width: 680px;background: transparent;color: var(--muted);text-align: center;padding: 10px 12px;justify-self: center;margin: 0 auto;font-weight:600;border-radius:8px}
+
+/* Footer: 中央揃えに設定 */
+    footer{background:transparent}
+    footer .container{padding:20px;text-align:center} /* ここで中央揃えに指定 */
+    footer p{margin:0;color:var(--muted);font-size:0.98rem}
 
 /* focus states */
     .font-size-button:focus, #fontToggle:focus, .external-link:focus, .photo-card:focus, .memory-card:focus {outline:3px solid rgba(92,107,192,0.18);outline-offset:4px}
@@ -199,8 +203,8 @@
   </main>
 
   <footer>
-    <div class="container" style="padding:20px;">
-      <p style="margin:0;color:var(--muted);font-size:0.98rem">&copy; 2025 Palet's. All rights reserved.</p>
+    <div class="container">
+      <p>&copy; 2025 Palet's. All rights reserved.</p>
     </div>
   </footer>
 
