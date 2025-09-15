@@ -33,7 +33,7 @@
     .search-bar{margin-bottom:24px}
     .search-bar input{width:100%;max-width:400px;padding:10px 12px;border:1px solid #ccc;border-radius:4px;font-size:.95rem}
 
-    /* カードをやや大きめ（前回の150pxから増やして約220px相当に） */
+    /* カードをやや大きめ（前回の指定） */
     .photo-cards,.memory-cards{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -50,7 +50,7 @@
       transition:transform .18s,box-shadow .18s;
       text-align:left;
       width:100%;
-      max-width:220px; /* ここでカード幅を少し大きめに設定 */
+      max-width:220px;
     }
     .photo-card:hover,.memory-card:hover{transform:translateY(-6px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
 
@@ -77,14 +77,16 @@
       outline-offset:2px;
     }
 
-    /* 検索で該当なしメッセージ */
+    /* 検索で該当なしメッセージ（中央揃えに調整） */
     .no-results {
-      grid-column: 1/-1;
-      max-width:600px;
-      background:transparent;
-      color:var(--muted);
-      text-align:center;
-      padding:8px 12px;
+      grid-column: 1 / -1;
+      max-width: 600px;
+      background: transparent;
+      color: var(--muted);
+      text-align: center;       /* テキストを中央揃え */
+      padding: 8px 12px;
+      justify-self: center;     /* グリッド内で要素自体を中央寄せ */
+      margin: 0 auto;           /* 念のため左右マージンで中央に */
     }
 
     @media(max-width:760px){
@@ -129,7 +131,7 @@
       </div>
 
       <div class="right-area">
-        <!-- ダークモード削除のため右側は空にしています -->
+        <!-- 右側は空 -->
       </div>
     </div>
   </header>
