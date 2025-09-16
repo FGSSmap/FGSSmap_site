@@ -16,6 +16,11 @@
       --text:#333;
       --muted:#777;
       --shadow: 0 6px 20px rgba(20,20,40,0.08);
+
+      /* footer specific */
+      --footer-bg:#22293a;
+      --footer-text:#f4f6fb;
+      --footer-accent: #5c6bc0;
     }
 
     html{font-size:var(--base);scroll-behavior:smooth}
@@ -106,10 +111,25 @@
 /* no-results center */
     .no-results {grid-column: 1 / -1;max-width: 680px;background: transparent;color: var(--muted);text-align: center;padding: 10px 12px;justify-self: center;margin: 0 auto;font-weight:600;border-radius:8px}
 
-/* Footer: 中央揃えに設定 */
+/* Footer: make copyright area stand out */
     footer{background:transparent}
-    footer .container{padding:20px;text-align:center} /* ここで中央揃えに指定 */
-    footer p{margin:0;color:var(--muted);font-size:0.98rem}
+    footer .container{padding:18px 20px;text-align:center}
+
+/* prominent footer bar */
+    .footer-bar{
+      background:var(--footer-bg);
+      color:var(--footer-text);
+      border-top:4px solid rgba(255,255,255,0.04);
+      box-shadow: 0 -6px 20px rgba(20,20,40,0.06);
+      padding:18px 0;
+      margin-top:28px; /* add visible white gap above footer bar */
+    }
+    .footer-bar p{
+      margin:0;
+      color:var(--footer-text);
+      font-size:0.98rem;
+      opacity:0.95;
+    }
 
 /* focus states */
     .font-size-button:focus, #fontToggle:focus, .external-link:focus, .photo-card:focus, .memory-card:focus {outline:3px solid rgba(92,107,192,0.18);outline-offset:4px}
@@ -203,8 +223,10 @@
   </main>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2025 Palet's. All rights reserved.</p>
+    <div class="footer-bar" role="contentinfo" aria-label="著作権表示">
+      <div class="container">
+        <p>&copy; 2025 Palet's. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
@@ -250,10 +272,7 @@
       apply(saved || 'medium');
 
       let rto;
-      window.addEventListener('resize', ()=>{
-        clearTimeout(rto);
-        rto = setTimeout(()=>{ if (window.innerWidth > 760) selector.style.display = ''; }, 150);
-      });
+      window.addEventListener('resize', ()=>{ clearTimeout(rto); rto = setTimeout(()=>{ if (window.innerWidth > 760) selector.style.display = ''; }, 150); });
     })();
 
     /* Back to top */
