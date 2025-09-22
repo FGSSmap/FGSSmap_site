@@ -382,6 +382,8 @@ class FormStepManager {
   }
   
   nextStep() {
+    console.log(`🔍 nextStep呼び出し: 現在ステップ ${this.currentStep}`);
+    
     if (!this.canProceedToNext()) {
       this.showValidationError();
       return;
@@ -389,9 +391,9 @@ class FormStepManager {
     
     if (this.currentStep < this.totalSteps - 1) { // 0ベースなので -1
       this.currentStep++;
+      console.log(`➡️ ステップ ${this.currentStep} に移動`);
       this.updateUI();
       this.scrollToTop();
-      console.log(`➡️ ステップ ${this.currentStep} に移動`);
     } else {
       console.log(`⚠️ 最後のステップです (${this.currentStep}/${this.totalSteps - 1})`);
     }
@@ -424,11 +426,17 @@ class FormStepManager {
         const yearElement = document.getElementById('admission-year');
         const deptElement = document.getElementById('department');
         
+        console.log(`🔍 yearElement存在: ${!!yearElement}`);
+        console.log(`🔍 deptElement存在: ${!!deptElement}`);
+        
         const actualYear = yearElement ? yearElement.value : '';
         const actualDept = deptElement ? deptElement.value : '';
         
         console.log(`🔍 実際の年度値: "${actualYear}"`);
         console.log(`🔍 実際の学部値: "${actualDept}"`);
+        
+        // 現在のステップを確認
+        console.log(`🔍 現在のステップ: ${this.currentStep}`);
         
         // 実際の値でバリデーション
         const yearValid = actualYear && actualYear.trim() !== '';
