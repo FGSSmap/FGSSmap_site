@@ -4,9 +4,12 @@
 
 class FormStepManager {
   constructor() {
-    this.currentStep = 1;
-    this.totalSteps = 5; // 基本情報 → 地図範囲 → 詳細エリア → 思い出の場所 → 確認・送信
+    this.currentStep = 0;
+    this.totalSteps = 6; // 同意確認 → 基本情報 → 地図範囲 → 詳細エリア → 思い出の場所 → 確認・送信
     this.formData = {
+      // 個人情報同意
+      privacyAgreement: false,
+      
       // 基本情報
       name: '',
       admissionYear: '',
@@ -67,6 +70,12 @@ class FormStepManager {
     document.getElementById('next-btn')?.addEventListener('click', () => this.nextStep());
     document.getElementById('prev-btn')?.addEventListener('click', () => this.prevStep());
     document.getElementById('submit-btn')?.addEventListener('click', () => this.submitForm());
+    
+    // Step 0: 個人情報同意
+    document.getElementById('privacy-agreement')?.addEventListener('change', (e) => {
+      this.formData.privacyAgreement = e.target.checked;
+      this.updateNavigationButtons();
+    });
     
     // Step 1: 基本情報
     document.getElementById('user-name')?.addEventListener('input', (e) => {
@@ -286,6 +295,9 @@ class FormStepManager {
       option.classList.toggle('selected', option.dataset.map === mapType);
     });
     
+    // Show appropriate area selection
+    this.updateAreaSelection();
+    
     // Show/hide useful phrase field based on world selection
     this.updateUsefulPhraseVisibility();
     
@@ -323,6 +335,22 @@ class FormStepManager {
     console.log(`🌍 地域選択: ${this.regions[region]}`);
   }
   
+  updateAreaSelection() {
+    const japanArea = document.getElementById('japan-area');
+    const worldArea = document.getElementById('world-area');
+    
+    // Hide all area selections first
+    if (japanArea) japanArea.style.display = 'none';
+    if (worldArea) worldArea.style.display = 'none';
+    
+    // Show appropriate area selection
+    if (this.formData.mapType === 'japan' && japanArea) {
+      japanArea.style.display = 'block';
+    } else if (this.formData.mapType === 'world' && worldArea) {
+      worldArea.style.display = 'block';
+    }
+  }
+  
   updateUsefulPhraseVisibility() {
     const phraseGroup = document.getElementById('useful-phrase-group');
     const floatingBtn = document.getElementById('floating-help-btn');
@@ -351,7 +379,7 @@ class FormStepManager {
   }
   
   prevStep() {
-    if (this.currentStep > 1) {
+    if (this.currentStep > 0) {
       this.currentStep--;
       this.updateUI();
       this.scrollToTop();
@@ -361,6 +389,8 @@ class FormStepManager {
   
   canProceedToNext() {
     switch (this.currentStep) {
+      case 0: // 個人情報同意
+        return this.formData.privacyAgreement;
       case 1: // 基本情報
         return this.formData.admissionYear.trim() !== '' && 
                this.formData.department.trim() !== '';
@@ -383,6 +413,9 @@ class FormStepManager {
     let message = '';
     
     switch (this.currentStep) {
+      case 0:
+        message = '個人情報の取り扱いに同意していただく必要があります';
+        break;
       case 1:
         message = '入学年度と所属学部・学科は必須項目です';
         break;
@@ -591,7 +624,8 @@ class FormStepManager {
   }
   
   validateFormData() {
-    return this.formData.admissionYear &&
+    return this.formData.privacyAgreement &&
+           this.formData.admissionYear &&
            this.formData.department.trim() !== '' &&
            this.formData.mapType && 
            (this.formData.mapType === 'campus' || this.formData.area) &&
