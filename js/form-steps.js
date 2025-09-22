@@ -136,14 +136,20 @@ class FormStepManager {
     // Step 4: 思い出の場所情報
     document.getElementById('place-name')?.addEventListener('input', (e) => {
       this.formData.placeName = e.target.value;
+      console.log(`📝 思い出の場所名が変更されました: ${e.target.value}`);
+      this.updateNavigationButtons(); // UI更新
     });
     
     document.getElementById('memory-content')?.addEventListener('input', (e) => {
       this.formData.memoryContent = e.target.value;
+      console.log(`📝 思い出の内容が変更されました: ${e.target.value}`);
+      this.updateNavigationButtons(); // UI更新
     });
     
     document.getElementById('location-info')?.addEventListener('input', (e) => {
       this.formData.locationInfo = e.target.value;
+      console.log(`📝 住所・座標情報が変更されました: ${e.target.value}`);
+      this.updateNavigationButtons(); // UI更新
     });
     
     document.getElementById('photo-url')?.addEventListener('input', (e) => {
@@ -476,9 +482,30 @@ class FormStepManager {
       case 3: // 詳細エリア
         return this.formData.mapType === 'campus' || this.formData.area !== null;
       case 4: // 思い出の場所
-        return this.formData.placeName.trim() !== '' && 
-               this.formData.memoryContent.trim() !== '' &&
-               this.formData.locationInfo.trim() !== '';
+        // 実際のHTML要素から値を取得
+        const placeElement = document.getElementById('place-name');
+        const memoryElement = document.getElementById('memory-content');
+        const locationElement = document.getElementById('location-info');
+        
+        const placeName = placeElement ? placeElement.value : '';
+        const memoryContent = memoryElement ? memoryElement.value : '';
+        const locationInfo = locationElement ? locationElement.value : '';
+        
+        console.log(`🔍 Step 4 場所名: "${placeName}"`);
+        console.log(`🔍 Step 4 思い出内容: "${memoryContent}"`);
+        console.log(`🔍 Step 4 位置情報: "${locationInfo}"`);
+        
+        // フォームデータを更新（万一のため）
+        if (placeName) this.formData.placeName = placeName;
+        if (memoryContent) this.formData.memoryContent = memoryContent;
+        if (locationInfo) this.formData.locationInfo = locationInfo;
+        
+        const step4Valid = placeName.trim() !== '' && 
+                          memoryContent.trim() !== '' &&
+                          locationInfo.trim() !== '';
+        
+        console.log(`📝 Step 4 最終バリデーション結果: ${step4Valid}`);
+        return step4Valid;
       case 5: // 確認・送信
         return this.formData.agreement;
       default:
