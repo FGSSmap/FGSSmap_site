@@ -416,15 +416,30 @@ class FormStepManager {
         console.log(`📝 Step 0 バリデーション結果: ${canProceed}`);
         return canProceed;
       case 1: // 基本情報
+        // 現在のフォームデータ
         console.log(`📝 admissionYear: "${this.formData.admissionYear}"`);
         console.log(`📝 department: "${this.formData.department}"`);
         
-        // 入学年度と学部のチェック
-        const yearValid = this.formData.admissionYear && this.formData.admissionYear.trim() !== '';
-        const deptValid = this.formData.department && this.formData.department.trim() !== '';
+        // 実際のHTML要素からも直接取得して確認
+        const yearElement = document.getElementById('admission-year');
+        const deptElement = document.getElementById('department');
+        
+        const actualYear = yearElement ? yearElement.value : '';
+        const actualDept = deptElement ? deptElement.value : '';
+        
+        console.log(`🔍 実際の年度値: "${actualYear}"`);
+        console.log(`🔍 実際の学部値: "${actualDept}"`);
+        
+        // 実際の値でバリデーション
+        const yearValid = actualYear && actualYear.trim() !== '';
+        const deptValid = actualDept && actualDept.trim() !== '';
         
         console.log(`📝 入学年度バリデーション: ${yearValid}`);
         console.log(`📝 学部バリデーション: ${deptValid}`);
+        
+        // フォームデータを更新（万一のため）
+        if (actualYear) this.formData.admissionYear = actualYear;
+        if (actualDept) this.formData.department = actualDept;
         
         const step1Valid = yearValid && deptValid;
         console.log(`📝 Step 1 最終バリデーション結果: ${step1Valid}`);
