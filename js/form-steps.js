@@ -72,10 +72,16 @@ class FormStepManager {
     document.getElementById('submit-btn')?.addEventListener('click', () => this.submitForm());
     
     // Step 0: 個人情報同意
-    document.getElementById('privacy-agreement')?.addEventListener('change', (e) => {
-      this.formData.privacyAgreement = e.target.checked;
-      this.updateNavigationButtons();
-    });
+    const privacyCheckbox = document.getElementById('privacy-agreement');
+    if (privacyCheckbox) {
+      privacyCheckbox.addEventListener('change', (e) => {
+        this.formData.privacyAgreement = e.target.checked;
+        console.log(`📝 プライバシー同意が変更されました: ${e.target.checked}`);
+        this.updateNavigationButtons();
+      });
+    } else {
+      console.error('❌ privacy-agreement 要素が見つかりません');
+    }
     
     // Step 1: 基本情報
     document.getElementById('user-name')?.addEventListener('input', (e) => {
@@ -388,9 +394,14 @@ class FormStepManager {
   }
   
   canProceedToNext() {
+    console.log(`📝 ステップ${this.currentStep}のバリデーション確認`);
+    console.log(`📝 privacyAgreement: ${this.formData.privacyAgreement}`);
+    
     switch (this.currentStep) {
       case 0: // 個人情報同意
-        return this.formData.privacyAgreement;
+        const canProceed = this.formData.privacyAgreement;
+        console.log(`📝 Step 0 バリデーション結果: ${canProceed}`);
+        return canProceed;
       case 1: // 基本情報
         return this.formData.admissionYear.trim() !== '' && 
                this.formData.department.trim() !== '';
@@ -454,7 +465,7 @@ class FormStepManager {
   
   updateProgressIndicator() {
     document.querySelectorAll('.progress-step').forEach((step, index) => {
-      const stepNumber = index + 1;
+      const stepNumber = index; // 0ベースに修正
       
       step.classList.remove('active', 'completed');
       
@@ -466,14 +477,14 @@ class FormStepManager {
     });
     
     document.querySelectorAll('.progress-line').forEach((line, index) => {
-      const stepNumber = index + 1;
+      const stepNumber = index; // 0ベースに修正
       line.classList.toggle('completed', stepNumber < this.currentStep);
     });
   }
   
   updateStepVisibility() {
     document.querySelectorAll('.form-step').forEach((step, index) => {
-      const stepNumber = index + 1;
+      const stepNumber = index; // 0ベースに修正
       
       if (stepNumber === this.currentStep) {
         step.classList.add('active');
@@ -521,7 +532,7 @@ class FormStepManager {
     
     // Previous button
     if (prevBtn) {
-      prevBtn.style.display = this.currentStep > 1 ? 'flex' : 'none';
+      prevBtn.style.display = this.currentStep > 0 ? 'flex' : 'none'; // 0ベースに修正
     }
     
     // Next button
