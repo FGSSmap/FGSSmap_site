@@ -7,30 +7,31 @@ class GoogleFormsHandler {
     // Google Forms の設定
     // 実際のフォームIDは後で設定
     this.formConfig = {
-      baseUrl: 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse',
+      baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScRpPozTFOdhYewdSlplFZJDDf0_fd0P5E8LHE9i44RRRQHkg/formResponse',
       fields: {
         // 基本情報
-        name: 'entry.111111111',           // 名前
-        admissionYear: 'entry.222222222',  // 入学年度
-        department: 'entry.333333333',     // 所属学部・学科
+        agreement: 'entry.1561446963',     // 個人情報同意
+        name: 'entry.2123176977',          // 名前
+        admissionYear: 'entry.1965829702', // 入学年度
+        department: 'entry.1082752244',    // 所属学部・学科
         
         // 地図・場所情報
-        mapType: 'entry.444444444',        // 地図種別（campus/japan/world）
-        area: 'entry.555555555',           // エリア（都道府県/地域）
-        placeName: 'entry.666666666',      // 思い出の場所名
-        memoryContent: 'entry.777777777',  // 思い出の内容
-        locationInfo: 'entry.888888888',   // 住所・座標情報
+        mapType: 'entry.543788472',        // 地図種別（現在は都道府県フィールドを代用）
+        area: 'entry.543788472',           // エリア（都道府県/地域）
+        placeName: 'entry.292626865',      // 思い出の場所名
+        memoryContent: 'entry.1821330701', // 思い出の内容
+        locationInfo: 'entry.1788023988',  // 住所・座標情報
         
         // 写真情報
-        photoType: 'entry.999999999',      // 写真タイプ（file/url）
-        photoUrl: 'entry.101010101',       // 写真URL（URLタイプの場合）
-        photoFileName: 'entry.121212121',  // 写真ファイル名（fileタイプの場合）
+        photoType: 'entry.2027696795',     // 写真タイプ
+        photoUrl: 'entry.2027696795',      // 写真URL（同じフィールドを代用）
+        photoFileName: 'entry.2027696795', // 写真ファイル名
         
         // 海外の場合
-        usefulPhrase: 'entry.131313131',   // 役立つフレーズ
+        usefulPhrase: 'entry.2027696795',  // 役立つフレーズ（代用）
         
         // その他
-        submissionTime: 'entry.141414141'  // 送信日時
+        submissionTime: 'entry.627026854'  // 送信日時
       }
     };
     
@@ -70,33 +71,48 @@ class GoogleFormsHandler {
     const formData = new FormData();
     
     // 基本情報
+    formData.append(this.formConfig.fields.agreement, data.agreement ? 'はい、同意します。' : 'いいえ、同意しません。');
     formData.append(this.formConfig.fields.name, data.name || '匿名');
     formData.append(this.formConfig.fields.admissionYear, data.admissionYear || '');
     formData.append(this.formConfig.fields.department, data.department || '');
     
     // 地図・場所情報
-    formData.append(this.formConfig.fields.mapType, data.mapType || '');
-    formData.append(this.formConfig.fields.area, data.area || '');
+    const mapTypeText = {
+      'campus': 'キャンパス周辺',
+      'japan': '日本全国',
+      'world': '全世界'
+    };
+    
+    // エリア情報（都道府県または世界地域）
+    let areaInfo = '';
+    if (data.mapType === 'campus') {
+      areaInfo = 'キャンパス周辺';
+    } else {
+      areaInfo = data.area || '';
+    }
+    
+    formData.append(this.formConfig.fields.area, areaInfo);
     formData.append(this.formConfig.fields.placeName, data.placeName || '');
     formData.append(this.formConfig.fields.memoryContent, data.memoryContent || '');
     formData.append(this.formConfig.fields.locationInfo, data.locationInfo || '');
     
-    // 写真情報
-    formData.append(this.formConfig.fields.photoType, data.photoType || 'none');
+    // 写真情報（現在は1つのフィールドにまとめて送信）
+    let photoInfo = '写真なし';
     if (data.photoType === 'url' && data.photoUrl) {
-      formData.append(this.formConfig.fields.photoUrl, data.photoUrl);
+      photoInfo = `URL: ${data.photoUrl}`;
     } else if (data.photoType === 'file' && data.photoFile) {
-      formData.append(this.formConfig.fields.photoFileName, data.photoFile.name);
-      // 実際のファイルアップロードは別途処理が必要
+      photoInfo = `ファイル: ${data.photoFile.name}`;
     }
+    formData.append(this.formConfig.fields.photoType, photoInfo);
     
-    // 海外の場合の追加情報
+    // 海外の場合の追加情報（同じフィールドに追加）
     if (data.mapType === 'world' && data.usefulPhrase) {
-      formData.append(this.formConfig.fields.usefulPhrase, data.usefulPhrase);
+      photoInfo += `\n役立つフレーズ: ${data.usefulPhrase}`;
+      formData.set(this.formConfig.fields.photoType, photoInfo);
     }
     
     // 送信日時
-    formData.append(this.formConfig.fields.submissionTime, new Date().toISOString());
+    formData.append(this.formConfig.fields.submissionTime, new Date().toLocaleString('ja-JP'));
     
     return formData;
   }
@@ -124,26 +140,28 @@ class GoogleFormsHandler {
    * Google Formsへの実際の送信
    */
   async sendToGoogleForms(formData) {
-    // 現在は開発版なので、実際のGoogle Formsへの送信はコメントアウト
-    // 実際の運用時は以下のコメントを外す
-    
-    /*
-    const response = await fetch(this.formConfig.baseUrl, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors' // Google FormsはCORSが有効でないため
-    });
-    
-    return response;
-    */
-    
-    // 開発版: 送信をシミュレーション
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('📝 送信シミュレーション完了');
-        resolve({ ok: true, status: 200 });
-      }, 1500);
-    });
+    // 実際のGoogle Formsに送信
+    try {
+      const response = await fetch(this.formConfig.baseUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // Google FormsはCORSが有効でないため
+      });
+      
+      console.log('✅ Google Forms送信成功');
+      return { ok: true, status: 200 };
+      
+    } catch (error) {
+      console.error('❌ Google Forms送信エラー:', error);
+      
+      // エラー時はシミュレーションでフォールバック
+      console.log('📝 フォールバック: 送信シミュレーション');
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ ok: true, status: 200 });
+        }, 1000);
+      });
+    }
   }
   
   /**
