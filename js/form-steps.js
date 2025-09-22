@@ -93,10 +93,16 @@ class FormStepManager {
       console.log(`📝 入学年度が変更されました: ${e.target.value}`);
     });
     
-    document.getElementById('department')?.addEventListener('input', (e) => {
-      this.formData.department = e.target.value;
-      console.log(`📝 所属学部が変更されました: ${e.target.value}`);
-    });
+    const departmentField = document.getElementById('department');
+    if (departmentField) {
+      departmentField.addEventListener('input', (e) => {
+        this.formData.department = e.target.value;
+        console.log(`📝 所属学部が変更されました: ${e.target.value}`);
+      });
+      console.log('✅ departmentフィールドが見つかりました');
+    } else {
+      console.error('❌ departmentフィールドが見つかりません');
+    }
     
     // Step 2: 地図範囲選択
     document.querySelectorAll('.map-option').forEach(option => {
