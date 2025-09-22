@@ -66,6 +66,23 @@ class FormStepManager {
   }
   
   bindEvents() {
+    // フォームのデフォルト送信を防ぐ
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log('⚠️ フォーム送信をブロックしました');
+      });
+    });
+    
+    // Enterキーでのフォーム送信を防ぐ（inputフィールドでのみ）
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.matches('input[type="text"], input[type="email"], input[type="url"], textarea')) {
+        e.preventDefault();
+        console.log('⚠️ Enterキーでの送信をブロックしました（textフィールド）');
+      }
+      // selectフィールドでは通常のEnterキー動作を許可
+    });
+    
     // Navigation buttons
     document.getElementById('next-btn')?.addEventListener('click', () => this.nextStep());
     document.getElementById('prev-btn')?.addEventListener('click', () => this.prevStep());
@@ -91,6 +108,7 @@ class FormStepManager {
     document.getElementById('admission-year')?.addEventListener('change', (e) => {
       this.formData.admissionYear = e.target.value;
       console.log(`📝 入学年度が変更されました: ${e.target.value}`);
+      this.updateNavigationButtons(); // UI更新
     });
     
     const departmentField = document.getElementById('department');
@@ -98,6 +116,7 @@ class FormStepManager {
       departmentField.addEventListener('change', (e) => {
         this.formData.department = e.target.value;
         console.log(`📝 所属学部が変更されました: ${e.target.value}`);
+        this.updateNavigationButtons(); // UI更新
       });
       console.log('✅ departmentセレクトフィールドが見つかりました');
     } else {
