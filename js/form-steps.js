@@ -146,15 +146,18 @@ class FormStepManager {
     const grid = document.querySelector('.prefecture-grid');
     if (!grid) return;
     
-    grid.innerHTML = this.prefectures.map((prefecture, index) => `
-      <button type="button" class="prefecture-btn" data-prefecture="${prefecture}">
-        ${prefecture}
-      </button>
-    `).join('');
+    grid.innerHTML = '';
     
-    // Add click events
-    grid.querySelectorAll('.prefecture-btn').forEach(btn => {
-      btn.addEventListener('click', () => this.selectPrefecture(btn.dataset.prefecture));
+    this.prefectures.forEach(prefecture => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'prefecture-btn';
+      button.dataset.prefecture = prefecture;
+      button.textContent = prefecture;
+      
+      button.addEventListener('click', () => this.selectPrefecture(prefecture));
+      
+      grid.appendChild(button);
     });
   }
   
@@ -415,9 +418,16 @@ class FormStepManager {
       case 1: // 基本情報
         console.log(`📝 admissionYear: "${this.formData.admissionYear}"`);
         console.log(`📝 department: "${this.formData.department}"`);
-        const step1Valid = this.formData.admissionYear.trim() !== '' && 
-                           this.formData.department.trim() !== '';
-        console.log(`📝 Step 1 バリデーション結果: ${step1Valid}`);
+        
+        // 入学年度と学部のチェック
+        const yearValid = this.formData.admissionYear && this.formData.admissionYear.trim() !== '';
+        const deptValid = this.formData.department && this.formData.department.trim() !== '';
+        
+        console.log(`📝 入学年度バリデーション: ${yearValid}`);
+        console.log(`📝 学部バリデーション: ${deptValid}`);
+        
+        const step1Valid = yearValid && deptValid;
+        console.log(`📝 Step 1 最終バリデーション結果: ${step1Valid}`);
         return step1Valid;
       case 2: // 地図範囲
         return this.formData.mapType !== null;
@@ -549,17 +559,29 @@ class FormStepManager {
       prevBtn.style.display = this.currentStep > 0 ? 'flex' : 'none'; // 0ベースに修正
     }
     
-    // Next button
-    if (nextBtn) {
-      nextBtn.style.display = this.currentStep < this.totalSteps ? 'flex' : 'none';
-      nextBtn.disabled = !this.canProceedToNext();
+    // Next/Submit buttons
+    if (this.currentStep < this.totalSteps - 1) {
+      // Show next button
+      if (nextBtn) {
+        nextBtn.style.display = 'flex';
+        nextBtn.disabled = !this.canProceedToNext();
+      }
+      if (submitBtn) submitBtn.style.display = 'none';
+    } else {
+      // Show submit button
+      if (nextBtn) nextBtn.style.display = 'none';
+      if (submitBtn) {
+        submitBtn.style.display = 'flex';
+        submitBtn.disabled = !this.canProceedToNext();
+      }
     }
-    
-    // Submit button
-    if (submitBtn) {
-      submitBtn.style.display = this.currentStep === this.totalSteps ? 'flex' : 'none';
-      submitBtn.disabled = !this.canProceedToNext();
-    }
+  }
+  
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
   
   updateConfirmation() {
@@ -682,23 +704,12 @@ class FormStepManager {
               <p><strong>場所:</strong> ${this.formData.placeName}</p>
             </div>
           </div>
-          <a href="https://fgssmap.github.io/FGSSmap/" class="btn btn-primary" style="text-decoration: none;">
-            <i class="fas fa-map"></i>
-            FGSSmapを見る
-          </a>
+          <button onclick="location.reload()" style="background: var(--primary-color); color: white; border: none; padding: 1rem 2rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem;">
+            新しい投稿をする
+          </button>
         </div>
       `;
     }
-    
-    // Progress indicator to completed
-    document.querySelectorAll('.progress-step').forEach(step => {
-      step.classList.add('completed');
-      step.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.progress-line').forEach(line => {
-      line.classList.add('completed');
-    });
   }
   
   getMapTypeName() {
@@ -718,52 +729,48 @@ class FormStepManager {
   }
   
   showNotification(message, type = 'info') {
-    // Simple notification system
+    // Create notification element
     const notification = document.createElement('div');
-    notification.style.cssText = `
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      background: ${type === 'error' ? '#f8d7da' : type === 'warning' ? '#fff3cd' : '#d4edda'};
-      color: ${type === 'error' ? '#721c24' : type === 'warning' ? '#856404' : '#155724'};
-      padding: 1rem 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: var(--shadow-lg);
-      z-index: 10000;
-      font-weight: 600;
-      max-width: 300px;
-      opacity: 0;
-      transform: translateX(100%);
-      transition: var(--transition);
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span class="notification-message">${message}</span>
+        <button class="notification-close">&times;</button>
+      </div>
     `;
     
-    notification.textContent = message;
+    // Add to page
     document.body.appendChild(notification);
     
-    // Show animation
+    // Auto remove after 5 seconds
     setTimeout(() => {
-      notification.style.opacity = '1';
-      notification.style.transform = 'translateX(0)';
-    }, 100);
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 5000);
     
-    // Hide after 4 seconds
-    setTimeout(() => {
-      notification.style.opacity = '0';
-      notification.style.transform = 'translateX(100%)';
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 300);
-    }, 4000);
-  }
-  
-  scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Manual close
+    notification.querySelector('.notification-close').addEventListener('click', () => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    });
+    
+    // Show animation
+    setTimeout(() => notification.classList.add('show'), 10);
   }
 }
 
-// Initialize when DOM is loaded
+// ===================================
+// Initialize Form Step Manager
+// ===================================
+
+// Global instance
+window.formStepManager = null;
+
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   window.formStepManager = new FormStepManager();
+  
+  console.log('🚀 フォームステップマネージャー開始');
 });
