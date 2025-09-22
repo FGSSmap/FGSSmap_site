@@ -13,22 +13,22 @@ class GoogleFormsHandler {
         agreement: 'entry.1561446963',     // 個人情報同意
         name: 'entry.2123176977',          // 名前
         admissionYear: 'entry.1965829702', // 入学年度
-        department: 'entry.1082752244',    // 所属学部・学科
+        department: 'entry.1082752244',    // 所属学部（選択式に変更）
         
         // 地図・場所情報
-        mapType: 'entry.543788472',        // 地図種別（現在は都道府県フィールドを代用）
+        mapType: 'entry.2034270027',       // 地図種別（新規エントリー）
         area: 'entry.543788472',           // エリア（都道府県/地域）
         placeName: 'entry.292626865',      // 思い出の場所名
         memoryContent: 'entry.1821330701', // 思い出の内容
         locationInfo: 'entry.1788023988',  // 住所・座標情報
         
-        // 写真情報
-        photoType: 'entry.2027696795',     // 写真タイプ
-        photoUrl: 'entry.2027696795',      // 写真URL（同じフィールドを代用）
-        photoFileName: 'entry.2027696795', // 写真ファイル名
+        // 写真情報（現在は存在しないため他フィールドで代用）
+        photoType: 'entry.1788023988',     // 住所フィールドで代用
+        photoUrl: 'entry.1788023988',      // 住所フィールドで代用
+        photoFileName: 'entry.1788023988', // 住所フィールドで代用
         
-        // 海外の場合
-        usefulPhrase: 'entry.2027696795',  // 役立つフレーズ（代用）
+        // 海外の場合（現在は存在しないため他フィールドで代用）
+        usefulPhrase: 'entry.1788023988',  // 住所フィールドで代用
         
         // その他
         submissionTime: 'entry.627026854'  // 送信日時
@@ -71,7 +71,7 @@ class GoogleFormsHandler {
     const formData = new FormData();
     
     // 基本情報
-    formData.append(this.formConfig.fields.agreement, data.agreement ? 'はい、同意します。' : 'いいえ、同意しません。');
+    formData.append(this.formConfig.fields.agreement, data.privacyAgreement ? 'はい。同意します。' : 'いいえ、同意しません。');
     formData.append(this.formConfig.fields.name, data.name || '匿名');
     formData.append(this.formConfig.fields.admissionYear, data.admissionYear || '');
     formData.append(this.formConfig.fields.department, data.department || '');
@@ -82,6 +82,9 @@ class GoogleFormsHandler {
       'japan': '日本全国',
       'world': '全世界'
     };
+    
+    // 地図種別を送信
+    formData.append(this.formConfig.fields.mapType, mapTypeText[data.mapType] || data.mapType || '');
     
     // エリア情報（都道府県または世界地域）
     let areaInfo = '';
