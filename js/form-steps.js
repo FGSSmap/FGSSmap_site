@@ -95,11 +95,11 @@ class FormStepManager {
     
     const departmentField = document.getElementById('department');
     if (departmentField) {
-      departmentField.addEventListener('input', (e) => {
+      departmentField.addEventListener('change', (e) => {
         this.formData.department = e.target.value;
         console.log(`📝 所属学部が変更されました: ${e.target.value}`);
       });
-      console.log('✅ departmentフィールドが見つかりました');
+      console.log('✅ departmentセレクトフィールドが見つかりました');
     } else {
       console.error('❌ departmentフィールドが見つかりません');
     }
