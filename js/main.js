@@ -38,12 +38,12 @@ class FGSSmapRecruitmentApp {
       this.handleKeyboardNavigation(e);
     });
     
-    // Form validation enhancement
-    document.addEventListener('input', (e) => {
-      if (e.target.matches('.form-input, .form-textarea')) {
-        this.enhanceFormValidation(e.target);
-      }
-    });
+    // Form validation enhancement (disabled for form-steps compatibility)
+    // document.addEventListener('input', (e) => {
+    //   if (e.target.matches('.form-input, .form-textarea')) {
+    //     this.enhanceFormValidation(e.target);
+    //   }
+    // });
     
     // Scroll behavior
     window.addEventListener('scroll', () => {
