@@ -162,10 +162,22 @@
                                     <i class="fas fa-graduation-cap"></i>
                                     所属学部・学科
                                 </label>
-                                <input type="text" id="department" name="department" class="form-input" required
-                                       placeholder="例：国際総合科学部国際総合科学科">
+                                <select id="department" name="department" class="form-select" required>
+                                    <option value="">所属学部を選択してください</option>
+                                    <option value="国際総合科学部">国際総合科学部</option>
+                                    <option value="人文学部">人文学部</option>
+                                    <option value="教育学部">教育学部</option>
+                                    <option value="経済学部">経済学部</option>
+                                    <option value="理学部">理学部</option>
+                                    <option value="医学部">医学部</option>
+                                    <option value="工学部">工学部</option>
+                                    <option value="農学部">農学部</option>
+                                    <option value="共同獣医学部">共同獣医学部</option>
+                                    <option value="データサイエンス学部">データサイエンス学部</option>
+                                    <option value="その他">その他</option>
+                                </select>
                                 <small class="form-help">
-                                    正式名称での入力をお願いします
+                                    あなたの所属する学部・学科を選択してください
                                 </small>
                             </div>
                         </div>
@@ -611,6 +623,6 @@
     <!-- Scripts -->
     <script src="js/form-steps.js"></script>
     <script src="js/google-forms.js"></script>
-    <script src="js/main.js"></script>
+    <!-- <script src="js/main.js"></script> -->
 </body>
 </html>
