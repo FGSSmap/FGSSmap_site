@@ -1,1 +1,28 @@
+@media (max-width: 600px) {
+  section {
+    padding: 2rem 1.5rem;
+    margin: 4rem auto;
+  }
 
+  section p {
+    font-size: 0.95rem;
+  }
+
+  .embed-section iframe,
+  .map-section iframe {
+    height: 400px;
+  }
+
+  .fixed-buttons {
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .header-top {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
