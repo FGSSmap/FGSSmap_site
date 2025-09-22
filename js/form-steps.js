@@ -90,10 +90,12 @@ class FormStepManager {
     
     document.getElementById('admission-year')?.addEventListener('change', (e) => {
       this.formData.admissionYear = e.target.value;
+      console.log(`📝 入学年度が変更されました: ${e.target.value}`);
     });
     
     document.getElementById('department')?.addEventListener('input', (e) => {
       this.formData.department = e.target.value;
+      console.log(`📝 所属学部が変更されました: ${e.target.value}`);
     });
     
     // Step 2: 地図範囲選択
@@ -376,11 +378,13 @@ class FormStepManager {
       return;
     }
     
-    if (this.currentStep < this.totalSteps) {
+    if (this.currentStep < this.totalSteps - 1) { // 0ベースなので -1
       this.currentStep++;
       this.updateUI();
       this.scrollToTop();
       console.log(`➡️ ステップ ${this.currentStep} に移動`);
+    } else {
+      console.log(`⚠️ 最後のステップです (${this.currentStep}/${this.totalSteps - 1})`);
     }
   }
   
@@ -403,8 +407,12 @@ class FormStepManager {
         console.log(`📝 Step 0 バリデーション結果: ${canProceed}`);
         return canProceed;
       case 1: // 基本情報
-        return this.formData.admissionYear.trim() !== '' && 
-               this.formData.department.trim() !== '';
+        console.log(`📝 admissionYear: "${this.formData.admissionYear}"`);
+        console.log(`📝 department: "${this.formData.department}"`);
+        const step1Valid = this.formData.admissionYear.trim() !== '' && 
+                           this.formData.department.trim() !== '';
+        console.log(`📝 Step 1 バリデーション結果: ${step1Valid}`);
+        return step1Valid;
       case 2: // 地図範囲
         return this.formData.mapType !== null;
       case 3: // 詳細エリア
