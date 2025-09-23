@@ -48,217 +48,306 @@
             font-size: 2.5rem;
             color: #2c3e50;
             margin-bottom: 1rem;
+            font-weight: 700;
         }
         
-        .header p {
-            font-size: 1.2rem;
-            color: #5a6c7d;
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
         }
         
+        .header .university-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* ステップ進捗表示 */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 0.5rem;
+        }
+        
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .progress-step:last-child::after {
+            display: none;
+        }
+        
+        .progress-step.active::after {
+            background: linear-gradient(to right, #667eea, #764ba2);
+        }
+        
+        .progress-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            line-height: 40px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .progress-step.active .progress-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .progress-step.completed .progress-number {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .progress-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .progress-step.active .progress-label {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* フォームコンテナ */
         .form-container {
-            background: rgba(255, 255, 255, 0.98);
-            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2rem;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
         
-        .form-group {
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        .step-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .step-description {
+            text-align: center;
+            color: #7f8c8d;
             margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        /* フォーム要素 */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         
         .form-label {
             display: block;
-            font-weight: 600;
-            color: #2c3e50;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2c3e50;
         }
         
-        .form-input, .form-select, .form-textarea {
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+        
+        .form-control {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #e1e8ed;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 1rem;
             font-family: inherit;
             transition: all 0.3s ease;
         }
         
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
+        .form-control:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
+        .form-control.error {
+            border-color: #e74c3c;
+            background-color: #fdf2f2;
         }
         
-        .checkbox-group {
+        .form-control.success {
+            border-color: #27ae60;
+            background-color: #f0f9f0;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* 選択肢ボタン */
+        .choice-buttons {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .choice-button {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .choice-button:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .choice-button.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .choice-button i {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* チェックボックス */
+        .checkbox-container {
             display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            margin-top: 0.2rem;
+        }
+        
+        .checkbox-container.error {
+            border-color: #e74c3c;
+            background-color: #fdf2f2;
+        }
+
+        /* ナビゲーションボタン */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-            transform: scale(1.2);
-        }
-        
-        .map-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .map-option {
-            padding: 1.5rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-        
-        .map-option:hover {
-            border-color: #667eea;
-            background: #f0f3ff;
-        }
-        
-        .map-option.selected {
-            border-color: #667eea;
-            background: #667eea;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
         
-        .area-selection {
-            margin-top: 1rem;
-        }
-        
-        .prefecture-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .prefecture-btn {
-            padding: 0.8rem 0.5rem;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        
-        .prefecture-btn:hover {
-            border-color: #667eea;
-            background: #f0f3ff;
-        }
-        
-        .prefecture-btn.selected {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .region-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .region-option {
-            padding: 1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-        
-        .region-option:hover {
-            border-color: #667eea;
-            background: #f0f3ff;
-        }
-        
-        .region-option.selected {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 2rem;
-        }
-        
-        .submit-btn:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
-        .submit-btn:disabled {
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            transform: none !important;
+            box-shadow: none !important;
         }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
+
+        /* エラーメッセージ */
+        .error-message {
+            background: #fdf2f2;
+            color: #e74c3c;
+            padding: 1rem;
             border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
+            margin: 1rem 0;
+            border-left: 4px solid #e74c3c;
         }
         
-        .notification.show {
-            transform: translateX(0);
+        .success-message {
+            background: #f0f9f0;
+            color: #27ae60;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
         }
-        
-        .notification.success {
-            background: #28a745;
-        }
-        
-        .notification.error {
-            background: #dc3545;
-        }
-        
-        .notification.warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        
+
+        /* レスポンシブ対応 */
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -276,510 +365,711 @@
                 padding: 2rem 1rem;
             }
             
-            .prefecture-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            .progress-steps {
+                flex-wrap: wrap;
+            }
+            
+            .progress-step {
+                min-width: 100px;
+                margin-bottom: 1rem;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .step-title {
+                font-size: 1.4rem;
+            }
+            
+            .choice-buttons {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <header class="header">
+        <!-- ヘッダー -->
+        <div class="header">
             <h1><i class="fas fa-map-marker-alt"></i> FGSSmap プレースマーク募集</h1>
-            <p>山口大学国際総合科学部10周年記念 - あなたの思い出の場所を地図に追加しませんか？</p>
-        </header>
-        
-        <!-- Main Form -->
+            <p class="subtitle">あなたの思い出の場所をFGSSmapに追加しませんか？</p>
+            <div class="university-badge">山口大学国際総合科学部 10周年記念プロジェクト</div>
+        </div>
+
+        <!-- プログレス表示 -->
+        <div class="progress-container">
+            <div class="progress-steps" id="progressSteps">
+                <div class="progress-step active" data-step="1">
+                    <div class="progress-number">1</div>
+                    <div class="progress-label">同意確認</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="progress-number">2</div>
+                    <div class="progress-label">基本情報</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="progress-number">3</div>
+                    <div class="progress-label">地図範囲</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="progress-number">4</div>
+                    <div class="progress-label">地域選択</div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="progress-number">5</div>
+                    <div class="progress-label">場所詳細</div>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <div class="progress-number">6</div>
+                    <div class="progress-label">送信</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- フォームコンテナ -->
         <div class="form-container">
-            <form id="main-form">
-                <!-- プライバシー同意 -->
-                <div class="form-group">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="privacy-agreement" required>
-                        <label for="privacy-agreement" class="form-label">
-                            個人情報の取り扱いに同意します
-                        </label>
+            <form id="multiStepForm">
+                <!-- ステップ1: 同意確認 -->
+                <div class="step active" data-step="1">
+                    <h2 class="step-title">プライバシー同意の確認</h2>
+                    <p class="step-description">参加にあたり、以下の内容にご同意ください。</p>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-container" id="agreementContainer">
+                            <input type="checkbox" id="privacyAgreement" name="privacyAgreement">
+                            <label for="privacyAgreement">
+                                <strong>プライバシーポリシーに同意します。</strong><br>
+                                提供いただいた情報は、FGSSmap作成の目的のみに使用し、適切に管理いたします。個人を特定できる形での公開は行いません。
+                            </label>
+                        </div>
                     </div>
-                    <small style="color: #666; margin-top: 0.5rem; display: block;">
-                        投稿内容はWebサイトに掲載される可能性があります
-                    </small>
                 </div>
-                
-                <!-- 基本情報 -->
-                <div class="form-group">
-                    <label for="name" class="form-label">
-                        <i class="fas fa-user"></i> お名前（ニックネーム可）
-                    </label>
-                    <input type="text" id="name" class="form-input" placeholder="例：山田太郎" required>
+
+                <!-- ステップ2: 基本情報 -->
+                <div class="step" data-step="2">
+                    <h2 class="step-title">基本情報の入力</h2>
+                    <p class="step-description">あなたの基本情報を教えてください。</p>
+                    
+                    <div class="form-group">
+                        <label for="name" class="form-label required">お名前（ニックネーム可）</label>
+                        <input type="text" id="name" name="name" class="form-control" 
+                               placeholder="例: 山口 太郎 または やまぐちさん">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admissionYear" class="form-label required">入学年度</label>
+                        <select id="admissionYear" name="admissionYear" class="form-control">
+                            <option value="">選択してください</option>
+                            <option value="2015">2015年度</option>
+                            <option value="2016">2016年度</option>
+                            <option value="2017">2017年度</option>
+                            <option value="2018">2018年度</option>
+                            <option value="2019">2019年度</option>
+                            <option value="2020">2020年度</option>
+                            <option value="2021">2021年度</option>
+                            <option value="2022">2022年度</option>
+                            <option value="2023">2023年度</option>
+                            <option value="2024">2024年度</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="department" class="form-label required">所属学部・コース</label>
+                        <select id="department" name="department" class="form-control">
+                            <option value="">選択してください</option>
+                            <option value="国際総合科学部">国際総合科学部</option>
+                            <option value="人文学部">人文学部</option>
+                            <option value="教育学部">教育学部</option>
+                            <option value="経済学部">経済学部</option>
+                            <option value="理学部">理学部</option>
+                            <option value="工学部">工学部</option>
+                            <option value="農学部">農学部</option>
+                            <option value="医学部">医学部</option>
+                            <option value="その他">その他</option>
+                        </select>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="admission-year" class="form-label">
-                        <i class="fas fa-calendar"></i> 入学年度
-                    </label>
-                    <select id="admission-year" class="form-select" required>
-                        <option value="">選択してください</option>
-                        <option value="2015">2015年度以前</option>
-                        <option value="2016">2016年度</option>
-                        <option value="2017">2017年度</option>
-                        <option value="2018">2018年度</option>
-                        <option value="2019">2019年度</option>
-                        <option value="2020">2020年度</option>
-                        <option value="2021">2021年度</option>
-                        <option value="2022">2022年度</option>
-                        <option value="2023">2023年度</option>
-                        <option value="2024">2024年度</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="department" class="form-label">
-                        <i class="fas fa-graduation-cap"></i> 所属学部・学科
-                    </label>
-                    <select id="department" class="form-select" required>
-                        <option value="">選択してください</option>
-                        <option value="国際総合科学部">国際総合科学部</option>
-                        <option value="人文学部">人文学部</option>
-                        <option value="教育学部">教育学部</option>
-                        <option value="経済学部">経済学部</option>
-                        <option value="理学部">理学部</option>
-                        <option value="医学部">医学部</option>
-                        <option value="工学部">工学部</option>
-                        <option value="農学部">農学部</option>
-                        <option value="共同獣医学部">共同獣医学部</option>
-                        <option value="その他">その他</option>
-                    </select>
-                </div>
-                
-                <!-- 地図範囲選択 -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-globe"></i> 地図の範囲
-                    </label>
-                    <div class="map-selection">
-                        <div class="map-option" data-map="campus">
+
+                <!-- ステップ3: 地図範囲選択 -->
+                <div class="step" data-step="3">
+                    <h2 class="step-title">地図の範囲を選択</h2>
+                    <p class="step-description">思い出の場所がある地図の範囲を選んでください。</p>
+                    
+                    <div class="choice-buttons">
+                        <button type="button" class="choice-button" data-value="campus">
                             <i class="fas fa-university"></i>
-                            <div>キャンパス周辺</div>
+                            キャンパス周辺
+                        </button>
+                        <button type="button" class="choice-button" data-value="japan">
+                            <i class="fas fa-flag"></i>
+                            日本全国
+                        </button>
+                        <button type="button" class="choice-button" data-value="world">
+                            <i class="fas fa-globe"></i>
+                            全世界
+                        </button>
+                    </div>
+                    
+                    <input type="hidden" id="mapType" name="mapType">
+                </div>
+
+                <!-- ステップ4: 地域選択 -->
+                <div class="step" data-step="4">
+                    <h2 class="step-title">地域を選択</h2>
+                    <p class="step-description">思い出の場所がある地域を選んでください。</p>
+                    
+                    <!-- 日本国内用 -->
+                    <div id="japanAreaSelection" style="display: none;">
+                        <div class="form-group">
+                            <label for="prefecture" class="form-label required">都道府県</label>
+                            <select id="prefecture" name="prefecture" class="form-control">
+                                <option value="">選択してください</option>
+                                <option value="北海道">北海道</option>
+                                <option value="青森県">青森県</option>
+                                <option value="岩手県">岩手県</option>
+                                <option value="宮城県">宮城県</option>
+                                <option value="秋田県">秋田県</option>
+                                <option value="山形県">山形県</option>
+                                <option value="福島県">福島県</option>
+                                <option value="茨城県">茨城県</option>
+                                <option value="栃木県">栃木県</option>
+                                <option value="群馬県">群馬県</option>
+                                <option value="埼玉県">埼玉県</option>
+                                <option value="千葉県">千葉県</option>
+                                <option value="東京都">東京都</option>
+                                <option value="神奈川県">神奈川県</option>
+                                <option value="新潟県">新潟県</option>
+                                <option value="富山県">富山県</option>
+                                <option value="石川県">石川県</option>
+                                <option value="福井県">福井県</option>
+                                <option value="山梨県">山梨県</option>
+                                <option value="長野県">長野県</option>
+                                <option value="岐阜県">岐阜県</option>
+                                <option value="静岡県">静岡県</option>
+                                <option value="愛知県">愛知県</option>
+                                <option value="三重県">三重県</option>
+                                <option value="滋賀県">滋賀県</option>
+                                <option value="京都府">京都府</option>
+                                <option value="大阪府">大阪府</option>
+                                <option value="兵庫県">兵庫県</option>
+                                <option value="奈良県">奈良県</option>
+                                <option value="和歌山県">和歌山県</option>
+                                <option value="鳥取県">鳥取県</option>
+                                <option value="島根県">島根県</option>
+                                <option value="岡山県">岡山県</option>
+                                <option value="広島県">広島県</option>
+                                <option value="山口県">山口県</option>
+                                <option value="徳島県">徳島県</option>
+                                <option value="香川県">香川県</option>
+                                <option value="愛媛県">愛媛県</option>
+                                <option value="高知県">高知県</option>
+                                <option value="福岡県">福岡県</option>
+                                <option value="佐賀県">佐賀県</option>
+                                <option value="長崎県">長崎県</option>
+                                <option value="熊本県">熊本県</option>
+                                <option value="大分県">大分県</option>
+                                <option value="宮崎県">宮崎県</option>
+                                <option value="鹿児島県">鹿児島県</option>
+                                <option value="沖縄県">沖縄県</option>
+                            </select>
                         </div>
-                        <div class="map-option" data-map="japan">
-                            <i class="fas fa-map"></i>
-                            <div>日本全国</div>
-                        </div>
-                        <div class="map-option" data-map="world">
-                            <i class="fas fa-globe-americas"></i>
-                            <div>全世界</div>
+                    </div>
+                    
+                    <!-- 世界用 -->
+                    <div id="worldAreaSelection" style="display: none;">
+                        <div class="form-group">
+                            <label for="worldArea" class="form-label required">世界の地域</label>
+                            <select id="worldArea" name="worldArea" class="form-control">
+                                <option value="">選択してください</option>
+                                <option value="東アジア">東アジア（中国、韓国、台湾など）</option>
+                                <option value="東南アジア">東南アジア（タイ、ベトナム、フィリピンなど）</option>
+                                <option value="南アジア">南アジア（インド、バングラデシュなど）</option>
+                                <option value="西アジア・中東">西アジア・中東（トルコ、イランなど）</option>
+                                <option value="ヨーロッパ">ヨーロッパ</option>
+                                <option value="北アメリカ">北アメリカ（アメリカ、カナダ）</option>
+                                <option value="中南米">中南米</option>
+                                <option value="アフリカ">アフリカ</option>
+                                <option value="オセアニア">オセアニア（オーストラリア、ニュージーランドなど）</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                
-                <!-- エリア選択 -->
-                <div class="form-group">
-                    <div id="area-selection" class="area-selection hidden">
-                        <!-- 日本の都道府県選択 -->
-                        <div id="japan-area" class="hidden">
-                            <label class="form-label">都道府県を選択してください</label>
-                            <div class="prefecture-grid" id="prefecture-grid">
-                                <!-- 都道府県ボタンが動的に生成されます -->
-                            </div>
-                        </div>
-                        
-                        <!-- 世界の地域選択 -->
-                        <div id="world-area" class="hidden">
-                            <label class="form-label">地域を選択してください</label>
-                            <div class="region-grid">
-                                <div class="region-option" data-region="asia">
-                                    <i class="fas fa-torii-gate"></i>
-                                    <div>アジア</div>
-                                </div>
-                                <div class="region-option" data-region="europe">
-                                    <i class="fas fa-landmark"></i>
-                                    <div>ヨーロッパ</div>
-                                </div>
-                                <div class="region-option" data-region="africa">
-                                    <i class="fas fa-mountain"></i>
-                                    <div>アフリカ</div>
-                                </div>
-                                <div class="region-option" data-region="oceania">
-                                    <i class="fas fa-island-tropical"></i>
-                                    <div>オセアニア</div>
-                                </div>
-                                <div class="region-option" data-region="north-america">
-                                    <i class="fas fa-city"></i>
-                                    <div>北アメリカ</div>
-                                </div>
-                                <div class="region-option" data-region="south-america">
-                                    <i class="fas fa-tree"></i>
-                                    <div>南アメリカ</div>
-                                </div>
-                            </div>
-                        </div>
+
+                <!-- ステップ5: 場所詳細 -->
+                <div class="step" data-step="5">
+                    <h2 class="step-title">思い出の場所について</h2>
+                    <p class="step-description">思い出の場所の詳細を教えてください。</p>
+                    
+                    <div class="form-group">
+                        <label for="placeName" class="form-label required">場所の名前</label>
+                        <input type="text" id="placeName" name="placeName" class="form-control" 
+                               placeholder="例: 山口大学図書館、渋谷スクランブル交差点">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="memoryContent" class="form-label required">思い出の内容</label>
+                        <textarea id="memoryContent" name="memoryContent" class="form-control" 
+                                  placeholder="この場所での思い出やエピソードを教えてください"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="locationInfo" class="form-label">住所・座標情報（任意）</label>
+                        <textarea id="locationInfo" name="locationInfo" class="form-control" 
+                                  placeholder="詳しい住所やGPS座標があれば教えてください"></textarea>
+                    </div>
+                    
+                    <!-- 役立つフレーズ（海外選択時のみ表示） -->
+                    <div id="usefulPhraseGroup" class="form-group" style="display: none;">
+                        <label for="usefulPhrase" class="form-label">現地で役立つフレーズ（任意）</label>
+                        <input type="text" id="usefulPhrase" name="usefulPhrase" class="form-control" 
+                               placeholder="例: Where is the bathroom? / ¿Dónde está el baño?">
                     </div>
                 </div>
-                
-                <!-- 思い出の場所情報 -->
-                <div class="form-group">
-                    <label for="place-name" class="form-label">
-                        <i class="fas fa-map-pin"></i> 思い出の場所の名前
-                    </label>
-                    <input type="text" id="place-name" class="form-input" placeholder="例：吉田キャンパス図書館" required>
+
+                <!-- ステップ6: 送信確認 -->
+                <div class="step" data-step="6">
+                    <h2 class="step-title">送信確認</h2>
+                    <p class="step-description">入力内容を確認して送信してください。</p>
+                    
+                    <div id="confirmationContent">
+                        <!-- 確認内容がここに表示される -->
+                    </div>
+                    
+                    <div id="submitMessage" style="display: none;"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="memory-content" class="form-label">
-                        <i class="fas fa-heart"></i> 思い出の内容
-                    </label>
-                    <textarea id="memory-content" class="form-textarea" 
-                              placeholder="この場所での思い出やエピソードを教えてください..." required></textarea>
+
+                <!-- ナビゲーションボタン -->
+                <div class="navigation-buttons">
+                    <button type="button" id="prevBtn" class="btn btn-secondary" style="display: none;">
+                        <i class="fas fa-chevron-left"></i> 前へ
+                    </button>
+                    
+                    <div style="flex: 1;"></div>
+                    
+                    <button type="button" id="nextBtn" class="btn btn-primary" disabled>
+                        次へ <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-paper-plane"></i> 送信
+                    </button>
                 </div>
-                
-                <div class="form-group">
-                    <label for="location-info" class="form-label">
-                        <i class="fas fa-location-dot"></i> 住所・座標情報
-                    </label>
-                    <textarea id="location-info" class="form-textarea" 
-                              placeholder="住所または座標（緯度, 経度）を入力してください" required></textarea>
-                </div>
-                
-                <!-- 役立つフレーズ（海外選択時のみ表示） -->
-                <div class="form-group hidden" id="useful-phrase-group">
-                    <label for="useful-phrase" class="form-label">
-                        <i class="fas fa-comment"></i> その地域で役立つフレーズ
-                    </label>
-                    <textarea id="useful-phrase" class="form-textarea" 
-                              placeholder="現地で役立つ言葉やフレーズがあれば教えてください"></textarea>
-                </div>
-                
-                <!-- 送信 -->
-                <button type="submit" class="submit-btn" id="submit-btn" disabled>
-                    <i class="fas fa-paper-plane"></i> 投稿を送信する
-                </button>
             </form>
         </div>
     </div>
-    
-    <!-- Scripts -->
+
     <script src="js/google-forms.js"></script>
     <script>
-        // フォーム管理クラス
-        class FormManager {
+        // 6ステップフォーム管理クラス
+        class MultiStepFormManager {
             constructor() {
-                this.formData = {
-                    privacyAgreement: false,
-                    name: '',
-                    admissionYear: '',
-                    department: '',
-                    mapType: null,
-                    area: null,
-                    placeName: '',
-                    memoryContent: '',
-                    locationInfo: '',
-                    usefulPhrase: ''
-                };
+                this.currentStep = 1;
+                this.totalSteps = 6;
+                this.formData = {};
                 
-                this.prefectures = [
-                    '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
-                    '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
-                    '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県',
-                    '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県',
-                    '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県',
-                    '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県',
-                    '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県'
-                ];
-                
-                this.regions = {
-                    'asia': 'アジア',
-                    'europe': 'ヨーロッパ',
-                    'africa': 'アフリカ',
-                    'oceania': 'オセアニア',
-                    'north-america': '北アメリカ',
-                    'south-america': '南アメリカ'
-                };
-                
-                this.init();
-            }
-            
-            init() {
-                this.generatePrefectureButtons();
+                this.initializeElements();
                 this.bindEvents();
-                this.updateSubmitButton();
-                console.log('📝 FormManager初期化完了');
+                this.updateUI();
+                
+                console.log('🚀 MultiStepFormManager初期化完了');
             }
             
-            generatePrefectureButtons() {
-                const grid = document.getElementById('prefecture-grid');
-                if (!grid) return;
+            initializeElements() {
+                this.form = document.getElementById('multiStepForm');
+                this.steps = document.querySelectorAll('.step');
+                this.progressSteps = document.querySelectorAll('.progress-step');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.submitBtn = document.getElementById('submitBtn');
                 
-                grid.innerHTML = '';
-                this.prefectures.forEach(prefecture => {
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = 'prefecture-btn';
-                    button.dataset.prefecture = prefecture;
-                    button.textContent = prefecture;
-                    button.addEventListener('click', () => this.selectPrefecture(prefecture));
-                    grid.appendChild(button);
-                });
+                // 地図タイプ選択ボタン
+                this.mapTypeButtons = document.querySelectorAll('.step[data-step="3"] .choice-button');
+                
+                console.log('📋 フォーム要素初期化完了');
             }
             
             bindEvents() {
-                // フォーム送信防止
-                document.getElementById('main-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.submitForm();
+                // ナビゲーションボタン
+                this.prevBtn.addEventListener('click', () => this.previousStep());
+                this.nextBtn.addEventListener('click', () => this.nextStep());
+                this.submitBtn.addEventListener('click', (e) => this.handleSubmit(e));
+                
+                // 地図タイプ選択
+                this.mapTypeButtons.forEach(button => {
+                    button.addEventListener('click', (e) => this.handleMapTypeSelection(e));
                 });
                 
-                // 基本項目
-                document.getElementById('privacy-agreement').addEventListener('change', (e) => {
-                    this.formData.privacyAgreement = e.target.checked;
-                    this.updateSubmitButton();
-                });
+                // フォーム入力監視
+                this.form.addEventListener('input', () => this.validateCurrentStep());
+                this.form.addEventListener('change', () => this.validateCurrentStep());
                 
-                document.getElementById('name').addEventListener('input', (e) => {
-                    this.formData.name = e.target.value;
-                    this.updateSubmitButton();
-                });
+                console.log('🔗 イベント登録完了');
+            }
+            
+            handleMapTypeSelection(e) {
+                const value = e.target.dataset.value;
                 
-                document.getElementById('admission-year').addEventListener('change', (e) => {
-                    this.formData.admissionYear = e.target.value;
-                    this.updateSubmitButton();
-                });
+                // ボタンの選択状態更新
+                this.mapTypeButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
                 
-                document.getElementById('department').addEventListener('change', (e) => {
-                    this.formData.department = e.target.value;
-                    this.updateSubmitButton();
-                });
+                // 隠しフィールドに値設定
+                document.getElementById('mapType').value = value;
                 
-                document.getElementById('place-name').addEventListener('input', (e) => {
-                    this.formData.placeName = e.target.value;
-                    this.updateSubmitButton();
-                });
+                // フォームデータ更新
+                this.formData.mapType = value;
                 
-                document.getElementById('memory-content').addEventListener('input', (e) => {
-                    this.formData.memoryContent = e.target.value;
-                    this.updateSubmitButton();
-                });
+                console.log('📍 地図タイプ選択:', value);
+                this.validateCurrentStep();
+            }
+            
+            validateCurrentStep() {
+                let isValid = false;
                 
-                document.getElementById('location-info').addEventListener('input', (e) => {
-                    this.formData.locationInfo = e.target.value;
-                    this.updateSubmitButton();
-                });
+                switch (this.currentStep) {
+                    case 1: // 同意確認
+                        isValid = document.getElementById('privacyAgreement').checked;
+                        this.updateAgreementUI(isValid);
+                        break;
+                        
+                    case 2: // 基本情報
+                        const name = document.getElementById('name').value.trim();
+                        const year = document.getElementById('admissionYear').value;
+                        const dept = document.getElementById('department').value;
+                        isValid = name && year && dept;
+                        this.updateRequiredFields(['name', 'admissionYear', 'department']);
+                        break;
+                        
+                    case 3: // 地図範囲
+                        isValid = document.getElementById('mapType').value !== '';
+                        break;
+                        
+                    case 4: // 地域選択
+                        const mapType = document.getElementById('mapType').value;
+                        if (mapType === 'japan') {
+                            isValid = document.getElementById('prefecture').value !== '';
+                            this.updateRequiredFields(['prefecture']);
+                        } else if (mapType === 'world') {
+                            isValid = document.getElementById('worldArea').value !== '';
+                            this.updateRequiredFields(['worldArea']);
+                        } else {
+                            isValid = true; // キャンパス周辺の場合はスキップ
+                        }
+                        break;
+                        
+                    case 5: // 場所詳細
+                        const placeName = document.getElementById('placeName').value.trim();
+                        const memory = document.getElementById('memoryContent').value.trim();
+                        isValid = placeName && memory;
+                        this.updateRequiredFields(['placeName', 'memoryContent']);
+                        break;
+                        
+                    case 6: // 送信確認
+                        isValid = true;
+                        this.generateConfirmation();
+                        break;
+                }
                 
-                document.getElementById('useful-phrase').addEventListener('input', (e) => {
-                    this.formData.usefulPhrase = e.target.value;
-                });
-                
-                // 地図範囲選択
-                document.querySelectorAll('.map-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        this.selectMapType(option.dataset.map);
-                    });
-                });
-                
-                // 世界地域選択
-                document.querySelectorAll('.region-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        this.selectRegion(option.dataset.region);
-                    });
+                this.nextBtn.disabled = !isValid;
+                return isValid;
+            }
+            
+            updateAgreementUI(isValid) {
+                const container = document.getElementById('agreementContainer');
+                if (isValid) {
+                    container.classList.remove('error');
+                } else {
+                    container.classList.add('error');
+                }
+            }
+            
+            updateRequiredFields(fieldIds) {
+                fieldIds.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    const value = field.value.trim();
+                    
+                    if (value) {
+                        field.classList.remove('error');
+                        field.classList.add('success');
+                    } else {
+                        field.classList.add('error');
+                        field.classList.remove('success');
+                    }
                 });
             }
             
-            selectMapType(mapType) {
-                this.formData.mapType = mapType;
-                this.formData.area = null; // リセット
+            nextStep() {
+                if (!this.validateCurrentStep()) return;
                 
-                // UI更新
-                document.querySelectorAll('.map-option').forEach(option => {
-                    option.classList.toggle('selected', option.dataset.map === mapType);
+                // 現在のステップのデータを保存
+                this.saveCurrentStepData();
+                
+                // キャンパス周辺選択時のスキップロジック
+                if (this.currentStep === 3 && this.formData.mapType === 'campus') {
+                    this.currentStep = 5; // ステップ4をスキップして5へ
+                    console.log('🏛️ キャンパス周辺選択: ステップ4をスキップ');
+                } else {
+                    this.currentStep++;
+                }
+                
+                this.updateUI();
+                this.validateCurrentStep();
+            }
+            
+            previousStep() {
+                // キャンパス周辺でステップ5から戻る場合
+                if (this.currentStep === 5 && this.formData.mapType === 'campus') {
+                    this.currentStep = 3; // ステップ4をスキップして3へ
+                    console.log('🏛️ キャンパス周辺: ステップ4をスキップして戻る');
+                } else {
+                    this.currentStep--;
+                }
+                
+                this.updateUI();
+                this.validateCurrentStep();
+            }
+            
+            saveCurrentStepData() {
+                switch (this.currentStep) {
+                    case 1:
+                        this.formData.privacyAgreement = document.getElementById('privacyAgreement').checked;
+                        break;
+                    case 2:
+                        this.formData.name = document.getElementById('name').value.trim();
+                        this.formData.admissionYear = document.getElementById('admissionYear').value;
+                        this.formData.department = document.getElementById('department').value;
+                        break;
+                    case 3:
+                        this.formData.mapType = document.getElementById('mapType').value;
+                        break;
+                    case 4:
+                        if (this.formData.mapType === 'japan') {
+                            this.formData.area = document.getElementById('prefecture').value;
+                        } else if (this.formData.mapType === 'world') {
+                            this.formData.area = document.getElementById('worldArea').value;
+                        }
+                        break;
+                    case 5:
+                        this.formData.placeName = document.getElementById('placeName').value.trim();
+                        this.formData.memoryContent = document.getElementById('memoryContent').value.trim();
+                        this.formData.locationInfo = document.getElementById('locationInfo').value.trim();
+                        this.formData.usefulPhrase = document.getElementById('usefulPhrase').value.trim();
+                        break;
+                }
+                
+                console.log('💾 ステップ', this.currentStep, 'データ保存:', this.formData);
+            }
+            
+            updateUI() {
+                // ステップ表示更新
+                this.steps.forEach((step, index) => {
+                    if (index + 1 === this.currentStep) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
                 });
                 
-                // エリア選択表示
-                const areaSelection = document.getElementById('area-selection');
-                const japanArea = document.getElementById('japan-area');
-                const worldArea = document.getElementById('world-area');
-                const usefulPhraseGroup = document.getElementById('useful-phrase-group');
-                
-                // 全て非表示
-                areaSelection.classList.add('hidden');
-                japanArea.classList.add('hidden');
-                worldArea.classList.add('hidden');
-                usefulPhraseGroup.classList.add('hidden');
-                
-                // 選択されたボタンのリセット
-                document.querySelectorAll('.prefecture-btn.selected').forEach(btn => {
-                    btn.classList.remove('selected');
+                // プログレス表示更新
+                this.progressSteps.forEach((step, index) => {
+                    const stepNumber = index + 1;
+                    if (stepNumber < this.currentStep) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (stepNumber === this.currentStep) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
                 });
-                document.querySelectorAll('.region-option.selected').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
+                
+                // ナビゲーションボタン表示制御
+                this.prevBtn.style.display = this.currentStep > 1 ? 'inline-flex' : 'none';
+                this.nextBtn.style.display = this.currentStep < this.totalSteps ? 'inline-flex' : 'none';
+                this.submitBtn.style.display = this.currentStep === this.totalSteps ? 'inline-flex' : 'none';
+                
+                // ステップ4の地域選択表示制御
+                if (this.currentStep === 4) {
+                    this.updateAreaSelection();
+                }
+                
+                // ステップ5の役立つフレーズ表示制御
+                if (this.currentStep === 5) {
+                    this.updateUsefulPhraseVisibility();
+                }
+                
+                console.log('🎨 UI更新完了 - ステップ:', this.currentStep);
+            }
+            
+            updateAreaSelection() {
+                const mapType = this.formData.mapType || document.getElementById('mapType').value;
+                const japanArea = document.getElementById('japanAreaSelection');
+                const worldArea = document.getElementById('worldAreaSelection');
                 
                 if (mapType === 'japan') {
-                    areaSelection.classList.remove('hidden');
-                    japanArea.classList.remove('hidden');
+                    japanArea.style.display = 'block';
+                    worldArea.style.display = 'none';
                 } else if (mapType === 'world') {
-                    areaSelection.classList.remove('hidden');
-                    worldArea.classList.remove('hidden');
-                    usefulPhraseGroup.classList.remove('hidden');
-                }
-                
-                this.updateSubmitButton();
-                console.log(`🗺️ 地図タイプ選択: ${mapType}`);
-            }
-            
-            selectPrefecture(prefecture) {
-                this.formData.area = prefecture;
-                
-                document.querySelectorAll('.prefecture-btn').forEach(btn => {
-                    btn.classList.toggle('selected', btn.dataset.prefecture === prefecture);
-                });
-                
-                this.updateSubmitButton();
-                console.log(`🏛️ 都道府県選択: ${prefecture}`);
-            }
-            
-            selectRegion(region) {
-                this.formData.area = this.regions[region];
-                
-                document.querySelectorAll('.region-option').forEach(option => {
-                    option.classList.toggle('selected', option.dataset.region === region);
-                });
-                
-                this.updateSubmitButton();
-                console.log(`🌍 地域選択: ${this.regions[region]}`);
-            }
-            
-            validateForm() {
-                const requiredFields = [
-                    'privacyAgreement',
-                    'name', 
-                    'admissionYear', 
-                    'department', 
-                    'mapType', 
-                    'placeName', 
-                    'memoryContent', 
-                    'locationInfo'
-                ];
-                
-                // 基本項目チェック
-                for (const field of requiredFields) {
-                    if (!this.formData[field] || this.formData[field] === '') {
-                        return false;
-                    }
-                }
-                
-                // エリア選択チェック（キャンパス以外）
-                if (this.formData.mapType !== 'campus' && !this.formData.area) {
-                    return false;
-                }
-                
-                return true;
-            }
-            
-            updateSubmitButton() {
-                const submitBtn = document.getElementById('submit-btn');
-                const isValid = this.validateForm();
-                
-                submitBtn.disabled = !isValid;
-                submitBtn.style.opacity = isValid ? '1' : '0.6';
-            }
-            
-            async submitForm() {
-                if (!this.validateForm()) {
-                    this.showNotification('入力内容を確認してください', 'error');
-                    return;
-                }
-                
-                const submitBtn = document.getElementById('submit-btn');
-                const container = document.querySelector('.form-container');
-                
-                // ローディング状態
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 送信中...';
-                container.classList.add('loading');
-                
-                try {
-                    console.log('📤 送信データ:', this.formData);
-                    
-                    // Google Forms送信
-                    if (window.GoogleFormsHandler) {
-                        await window.GoogleFormsHandler.submitToGoogleForms(this.formData);
-                        this.showNotification('✅ 投稿が正常に送信されました！', 'success');
-                        this.showSuccessScreen();
-                    } else {
-                        throw new Error('Google Forms連携が利用できません');
-                    }
-                    
-                } catch (error) {
-                    console.error('❌ 送信エラー:', error);
-                    this.showNotification('送信に失敗しました。もう一度お試しください。', 'error');
-                    
-                    // ボタン復元
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 投稿を送信する';
-                    container.classList.remove('loading');
+                    japanArea.style.display = 'none';
+                    worldArea.style.display = 'block';
+                } else {
+                    // キャンパス周辺の場合、このステップはスキップされる
+                    japanArea.style.display = 'none';
+                    worldArea.style.display = 'none';
                 }
             }
             
-            showSuccessScreen() {
-                const container = document.querySelector('.form-container');
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem 0;">
-                        <div style="font-size: 4rem; color: #28a745; margin-bottom: 2rem;">✅</div>
-                        <h2 style="color: #2c3e50; margin-bottom: 1rem; font-size: 2rem;">送信完了しました！</h2>
-                        <p style="color: #5a6c7d; font-size: 1.2rem; margin-bottom: 2rem;">
-                            プレースマークの投稿ありがとうございました。<br>
-                            内容を確認後、FGSSmapに追加させていただきます。
-                        </p>
-                        <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
-                            <h3 style="color: #2c3e50; margin-bottom: 1rem;">投稿内容</h3>
-                            <div style="text-align: left; color: #495057;">
-                                <p><strong>投稿者:</strong> ${this.formData.name} (${this.formData.admissionYear}年度)</p>
-                                <p><strong>所属:</strong> ${this.formData.department}</p>
-                                <p><strong>地図:</strong> ${this.getMapTypeName()}</p>
-                                <p><strong>エリア:</strong> ${this.formData.area || 'キャンパス周辺'}</p>
-                                <p><strong>場所:</strong> ${this.formData.placeName}</p>
-                            </div>
-                        </div>
-                        <button onclick="location.reload()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; cursor: pointer; font-size: 1.1rem;">
-                            新しい投稿をする
-                        </button>
-                    </div>
-                `;
+            updateUsefulPhraseVisibility() {
+                const mapType = this.formData.mapType || document.getElementById('mapType').value;
+                const usefulPhraseGroup = document.getElementById('usefulPhraseGroup');
+                
+                if (mapType === 'world') {
+                    usefulPhraseGroup.style.display = 'block';
+                } else {
+                    usefulPhraseGroup.style.display = 'none';
+                }
             }
             
-            getMapTypeName() {
-                const names = {
+            generateConfirmation() {
+                const content = document.getElementById('confirmationContent');
+                
+                const mapTypeText = {
                     'campus': 'キャンパス周辺',
                     'japan': '日本全国',
                     'world': '全世界'
                 };
-                return names[this.formData.mapType] || this.formData.mapType;
+                
+                const areaText = this.formData.mapType === 'japan' 
+                    ? this.formData.area 
+                    : this.formData.mapType === 'world' 
+                        ? this.formData.area 
+                        : 'キャンパス周辺';
+                
+                content.innerHTML = `
+                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">入力内容確認</h3>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>お名前:</strong> ${this.formData.name}<br>
+                            <strong>入学年度:</strong> ${this.formData.admissionYear}年度<br>
+                            <strong>所属学部:</strong> ${this.formData.department}
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>地図範囲:</strong> ${mapTypeText[this.formData.mapType]}<br>
+                            ${this.formData.mapType !== 'campus' ? `<strong>地域:</strong> ${areaText}<br>` : ''}
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>場所名:</strong> ${this.formData.placeName}<br>
+                            <strong>思い出:</strong><br>
+                            <div style="background: white; padding: 0.75rem; border-radius: 5px; margin-top: 0.5rem;">
+                                ${this.formData.memoryContent.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                        
+                        ${this.formData.locationInfo ? `
+                        <div style="margin-bottom: 1rem;">
+                            <strong>位置情報:</strong><br>
+                            <div style="background: white; padding: 0.75rem; border-radius: 5px; margin-top: 0.5rem;">
+                                ${this.formData.locationInfo.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${this.formData.usefulPhrase ? `
+                        <div style="margin-bottom: 1rem;">
+                            <strong>役立つフレーズ:</strong> ${this.formData.usefulPhrase}
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
             }
             
-            showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.textContent = message;
+            async handleSubmit(e) {
+                e.preventDefault();
                 
-                document.body.appendChild(notification);
+                console.log('📤 フォーム送信開始');
+                this.submitBtn.disabled = true;
+                this.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 送信中...';
                 
-                setTimeout(() => notification.classList.add('show'), 100);
+                try {
+                    // 最新のデータを保存
+                    this.saveCurrentStepData();
+                    
+                    // test.htmlと同じバリデーション
+                    if (!this.formData.name || !this.formData.name.trim()) {
+                        throw new Error('名前を入力してください');
+                    }
+                    if (!this.formData.memoryContent || !this.formData.memoryContent.trim()) {
+                        throw new Error('思い出の内容を入力してください');
+                    }
+                    if (!this.formData.mapType) {
+                        throw new Error('地図範囲を選択してください');
+                    }
+                    if (!this.formData.privacyAgreement) {
+                        throw new Error('プライバシー同意が必要です');
+                    }
+                    
+                    // Google Formsに送信 (test.htmlと同じ方式)
+                    await window.GoogleFormsHandler.submitToGoogleForms(this.formData);
+                    
+                    console.log('✅ 送信成功');
+                    this.showSuccessMessage();
+                    
+                } catch (error) {
+                    console.error('❌ 送信エラー:', error);
+                    this.showErrorMessage(error.message);
+                }
+            }
+            
+            showSuccessMessage() {
+                const messageDiv = document.getElementById('submitMessage');
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'success-message';
+                messageDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>送信完了！</strong><br>
+                    ご協力ありがとうございました。あなたの思い出の場所がFGSSmapに追加されます。
+                `;
                 
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, 4000);
+                this.submitBtn.style.display = 'none';
+                this.prevBtn.style.display = 'none';
+            }
+            
+            showErrorMessage(errorMsg = null) {
+                const messageDiv = document.getElementById('submitMessage');
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'error-message';
+                messageDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>送信エラー</strong><br>
+                    ${errorMsg || '申し訳ございませんが、送信に失敗しました。時間をおいて再度お試しください。'}
+                `;
+                
+                this.submitBtn.disabled = false;
+                this.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 再送信';
             }
         }
         
-        // 初期化
+        // フォーム初期化 (test.htmlと同じ方式)
         document.addEventListener('DOMContentLoaded', () => {
-            window.formManager = new FormManager();
-            console.log('🚀 FGSSmap プレースマーク募集フォーム開始');
+            window.formManager = new MultiStepFormManager();
+            console.log('🚀 6ステップフォーム準備完了');
+            console.log('💡 各ステップを進めて送信ボタンをクリックしてください');
         });
     </script>
 </body>
