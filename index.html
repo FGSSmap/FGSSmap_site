@@ -14,615 +14,773 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/forms.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #5a6c7d;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+        
+        .map-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .map-option {
+            padding: 1.5rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .map-option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .map-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .area-selection {
+            margin-top: 1rem;
+        }
+        
+        .prefecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .prefecture-btn {
+            padding: 0.8rem 0.5rem;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .prefecture-btn:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .prefecture-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .region-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .region-option {
+            padding: 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .region-option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .region-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: #28a745;
+        }
+        
+        .notification.error {
+            background: #dc3545;
+        }
+        
+        .notification.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 2rem 1rem;
+            }
+            
+            .prefecture-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="header-title">
-                    <i class="fas fa-map-marker-alt"></i>
-                    FGSSmap プレースマーク募集
-                </h1>
-                <p class="header-subtitle">あなたの思い出の場所を地図に追加しませんか？</p>
-                <div class="header-note">
-                    <i class="fas fa-info-circle"></i>
-                    回答内容はWebサイトに掲載される可能性があります
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Progress Indicator -->
-    <div class="progress-container">
-        <div class="container">
-            <div class="progress-steps">
-                <div class="progress-step active" data-step="0">
-                    <div class="step-number">1</div>
-                    <div class="step-label">同意確認</div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step" data-step="1">
-                    <div class="step-number">2</div>
-                    <div class="step-label">基本情報</div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step" data-step="2">
-                    <div class="step-number">3</div>
-                    <div class="step-label">地図範囲</div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step" data-step="3">
-                    <div class="step-number">4</div>
-                    <div class="step-label">詳細エリア</div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step" data-step="4">
-                    <div class="step-number">5</div>
-                    <div class="step-label">思い出の場所</div>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step" data-step="5">
-                    <div class="step-number">6</div>
-                    <div class="step-label">確認・送信</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <!-- Step 0: 個人情報同意確認 -->
-            <div class="form-step active" id="step-0">
-                <div class="step-content">
-                    <h2 class="step-title">個人情報の取り扱いについて</h2>
-                    <p class="step-description">まずはじめに、個人情報の取り扱いについてご確認ください</p>
-                    
-                    <div class="privacy-notice">
-                        <div class="notice-header">
-                            <i class="fas fa-shield-alt"></i>
-                            <h3>プライバシーポリシー</h3>
-                        </div>
-                        <div class="notice-content">
-                            <p>本フォームで収集した情報は、以下の目的でのみ使用し、適切に管理いたします。</p>
-                            <ul class="notice-list">
-                                <li><strong>FGSSmap（山口大学国際総合科学部の地図サービス）への掲載</strong></li>
-                                <li><strong>10周年記念プロジェクトの運営</strong></li>
-                                <li><strong>学部の教育・研究活動の向上</strong></li>
-                            </ul>
-                            <div class="notice-important">
-                                <p><strong>重要：</strong> 投稿内容は管理者による確認後、Webサイトに掲載される可能性があります。</p>
-                            </div>
-                        </div>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-map-marker-alt"></i> FGSSmap プレースマーク募集</h1>
+            <p>山口大学国際総合科学部10周年記念 - あなたの思い出の場所を地図に追加しませんか？</p>
+        </header>
+        
+        <!-- Main Form -->
+        <div class="form-container">
+            <form id="main-form">
+                <!-- プライバシー同意 -->
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="privacy-agreement" required>
+                        <label for="privacy-agreement" class="form-label">
+                            個人情報の取り扱いに同意します
+                        </label>
                     </div>
-                    
-                    <div class="agreement-section">
-                        <div class="form-checkbox">
-                            <input type="checkbox" id="privacy-agreement" name="privacy-agreement" required>
-                            <label for="privacy-agreement" class="agreement-label">
-                                <span class="agreement-text">
-                                    上記の個人情報の取り扱いについて同意します
-                                </span>
-                            </label>
-                        </div>
-                        <div class="agreement-note">
-                            <i class="fas fa-info-circle"></i>
-                            同意いただけない場合は、フォームをご利用いただけません。
-                        </div>
-                    </div>
+                    <small style="color: #666; margin-top: 0.5rem; display: block;">
+                        投稿内容はWebサイトに掲載される可能性があります
+                    </small>
                 </div>
-            </div>
-
-            <!-- Step 1: 基本情報入力 -->
-            <div class="form-step" id="step-1">
-                <div class="step-content">
-                    <h2 class="step-title">基本情報を入力してください</h2>
-                    <p class="step-description">あなたについて教えてください（ニックネームでもOKです）</p>
-                    
-                    <form class="basic-info-form">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="user-name" class="form-label">
-                                    <i class="fas fa-user"></i>
-                                    お名前（ニックネーム可）
-                                </label>
-                                <input type="text" id="user-name" name="user-name" class="form-input"
-                                       placeholder="例：山田太郎、やまちゃん">
-                                <small class="form-help">
-                                    個人情報保護のため、ニックネームでの投稿を推奨しています
-                                </small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="admission-year" class="form-label required">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    入学年度
-                                </label>
-                                <select id="admission-year" name="admission-year" class="form-select" required>
-                                    <option value="">入学年度を選択してください</option>
-                                    <option value="2024">2024年度</option>
-                                    <option value="2023">2023年度</option>
-                                    <option value="2022">2022年度</option>
-                                    <option value="2021">2021年度</option>
-                                    <option value="2020">2020年度</option>
-                                    <option value="2019">2019年度</option>
-                                    <option value="2018">2018年度</option>
-                                    <option value="2017">2017年度</option>
-                                    <option value="2016">2016年度</option>
-                                    <option value="2015">2015年度以前</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="department" class="form-label required">
-                                    <i class="fas fa-graduation-cap"></i>
-                                    所属学部・学科
-                                </label>
-                                <select id="department" name="department" class="form-select" required>
-                                    <option value="">所属学部を選択してください</option>
-                                    <option value="国際総合科学部">国際総合科学部</option>
-                                    <option value="人文学部">人文学部</option>
-                                    <option value="教育学部">教育学部</option>
-                                    <option value="経済学部">経済学部</option>
-                                    <option value="理学部">理学部</option>
-                                    <option value="医学部">医学部</option>
-                                    <option value="工学部">工学部</option>
-                                    <option value="農学部">農学部</option>
-                                    <option value="共同獣医学部">共同獣医学部</option>
-                                    <option value="データサイエンス学部">データサイエンス学部</option>
-                                    <option value="その他">その他</option>
-                                </select>
-                                <small class="form-help">
-                                    あなたの所属する学部・学科を選択してください
-                                </small>
-                            </div>
-                        </div>
-                    </form>
+                
+                <!-- 基本情報 -->
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        <i class="fas fa-user"></i> お名前（ニックネーム可）
+                    </label>
+                    <input type="text" id="name" class="form-input" placeholder="例：山田太郎" required>
                 </div>
-            </div>
-
-            <!-- Step 2: 地図範囲選択 -->
-            <div class="form-step" id="step-2">
-                <div class="step-content">
-                    <h2 class="step-title">どちらの地図にプレースマークを追加しますか？</h2>
-                    <p class="step-description">思い出の場所が含まれる地図を選択してください</p>
-                    
-                    <div class="map-options">
+                
+                <div class="form-group">
+                    <label for="admission-year" class="form-label">
+                        <i class="fas fa-calendar"></i> 入学年度
+                    </label>
+                    <select id="admission-year" class="form-select" required>
+                        <option value="">選択してください</option>
+                        <option value="2015">2015年度以前</option>
+                        <option value="2016">2016年度</option>
+                        <option value="2017">2017年度</option>
+                        <option value="2018">2018年度</option>
+                        <option value="2019">2019年度</option>
+                        <option value="2020">2020年度</option>
+                        <option value="2021">2021年度</option>
+                        <option value="2022">2022年度</option>
+                        <option value="2023">2023年度</option>
+                        <option value="2024">2024年度</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="department" class="form-label">
+                        <i class="fas fa-graduation-cap"></i> 所属学部・学科
+                    </label>
+                    <select id="department" class="form-select" required>
+                        <option value="">選択してください</option>
+                        <option value="国際総合科学部">国際総合科学部</option>
+                        <option value="人文学部">人文学部</option>
+                        <option value="教育学部">教育学部</option>
+                        <option value="経済学部">経済学部</option>
+                        <option value="理学部">理学部</option>
+                        <option value="医学部">医学部</option>
+                        <option value="工学部">工学部</option>
+                        <option value="農学部">農学部</option>
+                        <option value="共同獣医学部">共同獣医学部</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                
+                <!-- 地図範囲選択 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-globe"></i> 地図の範囲
+                    </label>
+                    <div class="map-selection">
                         <div class="map-option" data-map="campus">
-                            <div class="map-card">
-                                <div class="map-icon">
-                                    <i class="fas fa-university"></i>
-                                </div>
-                                <h3 class="map-title">キャンパス周辺</h3>
-                                <p class="map-description">山口大学周辺の施設・場所</p>
-                                <div class="map-examples">
-                                    例：やまぐち元気食堂、瑠璃光寺、山口サビエル記念聖堂
-                                </div>
-                            </div>
+                            <i class="fas fa-university"></i>
+                            <div>キャンパス周辺</div>
                         </div>
-                        
                         <div class="map-option" data-map="japan">
-                            <div class="map-card">
-                                <div class="map-icon">
-                                    <i class="fas fa-torii-gate"></i>
-                                </div>
-                                <h3 class="map-title">日本全国</h3>
-                                <p class="map-description">日本国内の思い出の場所</p>
-                                <div class="map-examples">
-                                    例：東京タワー、清水寺、札幌時計台
-                                </div>
-                            </div>
+                            <i class="fas fa-map"></i>
+                            <div>日本全国</div>
                         </div>
-                        
                         <div class="map-option" data-map="world">
-                            <div class="map-card">
-                                <div class="map-icon">
-                                    <i class="fas fa-globe-americas"></i>
-                                </div>
-                                <h3 class="map-title">全世界</h3>
-                                <p class="map-description">海外の思い出深い場所</p>
-                                <div class="map-examples">
-                                    例：エッフェル塔、自由の女神、万里の長城
-                                </div>
-                                <div class="world-bonus">
-                                    <i class="fas fa-comment-dots"></i>
-                                    役立つフレーズも投稿できます！
-                                </div>
-                            </div>
+                            <i class="fas fa-globe-americas"></i>
+                            <div>全世界</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: 詳細エリア選択 -->
-            <div class="form-step" id="step-3">
-                <!-- Japan Prefecture Selection -->
-                <div class="area-selection" id="japan-area" style="display: none;">
-                    <h2 class="step-title">都道府県を選択してください</h2>
-                    <p class="step-description">思い出の場所がある都道府県を選択してください</p>
-                    
-                    <div class="prefecture-grid">
-                        <!-- 47都道府県のボタンがJavaScriptで動的生成されます -->
-                    </div>
-                </div>
-
-                <!-- World Region Selection -->
-                <div class="area-selection" id="world-area" style="display: none;">
-                    <h2 class="step-title">地域を選択してください</h2>
-                    <p class="step-description">思い出の場所がある地域を選択してください</p>
-                    
-                    <div class="region-options">
-                        <div class="region-option" data-region="asia">
-                            <div class="region-card">
-                                <div class="region-icon">🌏</div>
-                                <h3>アジア</h3>
-                                <p>韓国、中国、台湾、東南アジア、インドなど</p>
-                            </div>
-                        </div>
-                        
-                        <div class="region-option" data-region="europe">
-                            <div class="region-card">
-                                <div class="region-icon">🏰</div>
-                                <h3>ヨーロッパ</h3>
-                                <p>フランス、イタリア、ドイツ、イギリスなど</p>
-                            </div>
-                        </div>
-                        
-                        <div class="region-option" data-region="africa">
-                            <div class="region-card">
-                                <div class="region-icon">🦁</div>
-                                <h3>アフリカ</h3>
-                                <p>エジプト、南アフリカ、ケニア、モロッコなど</p>
-                            </div>
-                        </div>
-                        
-                        <div class="region-option" data-region="oceania">
-                            <div class="region-card">
-                                <div class="region-icon">🦘</div>
-                                <h3>オセアニア</h3>
-                                <p>オーストラリア、ニュージーランド、フィジーなど</p>
-                            </div>
-                        </div>
-                        
-                        <div class="region-option" data-region="north-america">
-                            <div class="region-card">
-                                <div class="region-icon">🗽</div>
-                                <h3>北米</h3>
-                                <p>アメリカ、カナダ、メキシコなど</p>
-                            </div>
-                        </div>
-                        
-                        <div class="region-option" data-region="south-america">
-                            <div class="region-card">
-                                <div class="region-icon">🏔️</div>
-                                <h3>南米</h3>
-                                <p>ブラジル、アルゼンチン、ペルー、チリなど</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 4: 思い出の場所情報入力 -->
-            <div class="form-step" id="step-4">
-                <div class="step-content">
-                    <h2 class="step-title">思い出の場所について教えてください</h2>
-                    <p class="step-description">あなたの大切な思い出の場所について詳しく入力してください</p>
-                    
-                    <form class="memory-form" id="memory-form">
-                        <div class="form-grid">
-                            <div class="form-group full-width">
-                                <label for="place-name" class="form-label required">
-                                    <i class="fas fa-map-pin"></i>
-                                    思い出の場所の名前
-                                </label>
-                                <input type="text" id="place-name" name="place-name" class="form-input" required 
-                                       placeholder="例：山口大学、清水寺、エッフェル塔">
-                                <small class="form-help">
-                                    ⚠️ 「○○さんの家」など個人情報を含まないようにお願いします
-                                </small>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="memory-content" class="form-label required">
-                                    <i class="fas fa-heart"></i>
-                                    思い出の内容
-                                </label>
-                                <textarea id="memory-content" name="memory-content" class="form-textarea" required 
-                                          placeholder="例：友達と一緒にカフェでたわいもない会話をしていた。大学生活で一番楽しかった場所です。"></textarea>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="location-info" class="form-label required">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    住所または座標情報
-                                </label>
-                                <div class="location-input-container">
-                                    <input type="text" id="location-info" name="location-info" class="form-input" required 
-                                           placeholder="例：山口県山口市吉田1677-1 または 34.1234, 131.5678">
-                                    <button type="button" class="location-help-btn" id="location-help-btn">
-                                        <i class="fas fa-question-circle"></i>
-                                        座標取得方法
-                                    </button>
-                                </div>
-                                <small class="form-help">
-                                    住所または座標（緯度, 経度）のどちらでもOKです
-                                </small>
-                            </div>
-
-                            <div class="form-group full-width">
-                                <label for="memory-photo" class="form-label">
-                                    <i class="fas fa-camera"></i>
-                                    思い出の写真
-                                </label>
-                                <div class="photo-upload-container">
-                                    <div class="photo-upload-tabs">
-                                        <button type="button" class="photo-tab active" data-tab="file">
-                                            <i class="fas fa-upload"></i>
-                                            ファイルをアップロード
-                                        </button>
-                                        <button type="button" class="photo-tab" data-tab="url">
-                                            <i class="fas fa-link"></i>
-                                            URLから追加
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="photo-upload-content">
-                                        <div class="photo-tab-content active" id="photo-file-tab">
-                                            <div class="form-file">
-                                                <input type="file" id="photo-file" name="photo-file" accept="image/*">
-                                                <label for="photo-file" class="form-file-label">
-                                                    <i class="fas fa-cloud-upload-alt"></i>
-                                                    <div>
-                                                        <div>ここをクリックして写真を選択</div>
-                                                        <small>JPG, PNG, GIF形式（最大5MB）</small>
-                                                    </div>
-                                                </label>
-                                            </div>
-                                            <div class="photo-preview" id="photo-preview" style="display: none;"></div>
-                                        </div>
-                                        
-                                        <div class="photo-tab-content" id="photo-url-tab">
-                                            <input type="url" id="photo-url" name="photo-url" class="form-input" 
-                                                   placeholder="https://example.com/photo.jpg">
-                                            <small class="form-help">
-                                                写真共有サイトなどの公開URLを入力してください
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 海外の場合のみ表示される役立つフレーズフィールド -->
-                            <div class="form-group full-width" id="useful-phrase-group" style="display: none;">
-                                <label for="useful-phrase" class="form-label">
-                                    <i class="fas fa-comment-dots"></i>
-                                    その場所・地域で役立つフレーズ
-                                </label>
-                                <textarea id="useful-phrase" name="useful-phrase" class="form-textarea" 
-                                          placeholder="例：「Excuse me, where is the bathroom?」（すみません、トイレはどこですか？）
-現地の人とのコミュニケーションで役立ったフレーズがあれば教えてください。"></textarea>
-                                <small class="form-help">
-                                    現地の言語でのあいさつや実用的なフレーズを教えてください
-                                </small>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Step 5: 確認・送信 -->
-            <div class="form-step" id="step-5">
-                <div class="step-content">
-                    <h2 class="step-title">入力内容を確認してください</h2>
-                    <p class="step-description">内容に間違いがないか確認して送信してください</p>
-                    
-                    <div class="confirmation-card">
-                        <!-- 基本情報 -->
-                        <div class="confirmation-section">
-                            <h3 class="confirmation-title">基本情報</h3>
-                            <div class="confirmation-grid">
-                                <div class="confirmation-item">
-                                    <span class="confirmation-label">お名前</span>
-                                    <span class="confirmation-value" id="confirm-name">-</span>
-                                </div>
-                                <div class="confirmation-item">
-                                    <span class="confirmation-label">入学年度</span>
-                                    <span class="confirmation-value" id="confirm-admission-year">-</span>
-                                </div>
-                                <div class="confirmation-item">
-                                    <span class="confirmation-label">所属</span>
-                                    <span class="confirmation-value" id="confirm-department">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 場所情報 -->
-                        <div class="confirmation-section">
-                            <h3 class="confirmation-title">場所情報</h3>
-                            <div class="confirmation-grid">
-                                <div class="confirmation-item">
-                                    <span class="confirmation-label">地図種類</span>
-                                    <span class="confirmation-value" id="confirm-map-type">-</span>
-                                </div>
-                                <div class="confirmation-item">
-                                    <span class="confirmation-label">詳細エリア</span>
-                                    <span class="confirmation-value" id="confirm-area">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 思い出の場所 -->
-                        <div class="confirmation-section">
-                            <h3 class="confirmation-title">思い出の場所</h3>
-                            <div class="confirmation-item full-width">
-                                <span class="confirmation-label">場所の名前</span>
-                                <span class="confirmation-value" id="confirm-place-name">-</span>
-                            </div>
-                            <div class="confirmation-item full-width">
-                                <span class="confirmation-label">思い出の内容</span>
-                                <span class="confirmation-value long-text" id="confirm-memory-content">-</span>
-                            </div>
-                            <div class="confirmation-item full-width">
-                                <span class="confirmation-label">住所・座標</span>
-                                <span class="confirmation-value" id="confirm-location-info">-</span>
-                            </div>
-                            <div class="confirmation-item full-width" id="confirm-photo-section">
-                                <span class="confirmation-label">写真</span>
-                                <span class="confirmation-value" id="confirm-photo">未添付</span>
-                            </div>
-                            <div class="confirmation-item full-width" id="confirm-phrase-section" style="display: none;">
-                                <span class="confirmation-label">役立つフレーズ</span>
-                                <span class="confirmation-value long-text" id="confirm-useful-phrase">-</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 同意確認 -->
-                    <div class="agreement-section">
-                        <div class="form-checkbox">
-                            <input type="checkbox" id="agreement-checkbox" name="agreement" required>
-                            <label for="agreement-checkbox" class="agreement-label">
-                                <span class="agreement-text">
-                                    上記の内容がWebサイト（FGSSmap）に掲載されることに同意します
-                                </span>
-                            </label>
-                        </div>
-                        <div class="agreement-note">
-                            <i class="fas fa-info-circle"></i>
-                            投稿内容は管理者による確認後、FGSSmapに掲載されます。個人情報は適切に保護されます。
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div class="form-navigation">
-                <button type="button" class="btn btn-secondary" id="prev-btn" style="display: none;">
-                    <i class="fas fa-arrow-left"></i>
-                    戻る
-                </button>
-                
-                <button type="button" class="btn btn-primary" id="next-btn">
-                    次へ
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-                
-                <button type="button" class="btn btn-success" id="submit-btn" style="display: none;">
-                    <i class="fas fa-paper-plane"></i>
-                    送信する
-                </button>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p class="footer-text">
-                © 2024 山口大学国際総合科学部 - FGSSmap 10周年記念プロジェクト
-            </p>
-        </div>
-    </footer>
-
-    <!-- 座標取得ヘルプボタン（フローティング） -->
-    <button class="floating-help-btn" id="floating-help-btn" style="display: none;">
-        <i class="fas fa-map-marker-alt"></i>
-        <span>座標取得方法</span>
-    </button>
-
-    <!-- 座標取得ヘルプモーダル -->
-    <div class="help-modal-overlay" id="help-modal-overlay">
-        <div class="help-modal">
-            <div class="help-modal-header">
-                <h3>座標情報の取得方法</h3>
-                <button class="help-modal-close" id="help-modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="help-modal-content">
-                <div class="help-tabs">
-                    <button class="help-tab active" data-tab="video">
-                        <i class="fas fa-play"></i>
-                        動画で見る
-                    </button>
-                    <button class="help-tab" data-tab="text">
-                        <i class="fas fa-list"></i>
-                        手順説明
-                    </button>
-                </div>
-                
-                <div class="help-tab-content active" id="help-video-tab">
-                    <div class="video-container">
-                        <iframe id="help-video" width="100%" height="315" 
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                                frameborder="0" allowfullscreen>
-                        </iframe>
-                        <p class="video-note">
-                            <i class="fas fa-info-circle"></i>
-                            動画が表示されない場合は、下の手順説明タブをご覧ください
-                        </p>
                     </div>
                 </div>
                 
-                <div class="help-tab-content" id="help-text-tab">
-                    <div class="help-steps">
-                        <div class="help-step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Google Mapsを開く</h4>
-                                <p>ブラウザで <code>maps.google.com</code> にアクセス</p>
+                <!-- エリア選択 -->
+                <div class="form-group">
+                    <div id="area-selection" class="area-selection hidden">
+                        <!-- 日本の都道府県選択 -->
+                        <div id="japan-area" class="hidden">
+                            <label class="form-label">都道府県を選択してください</label>
+                            <div class="prefecture-grid" id="prefecture-grid">
+                                <!-- 都道府県ボタンが動的に生成されます -->
                             </div>
                         </div>
-                        <div class="help-step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>場所を検索</h4>
-                                <p>検索ボックスに場所の名前や住所を入力して検索</p>
-                            </div>
-                        </div>
-                        <div class="help-step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>地図上で右クリック</h4>
-                                <p>目的の場所を地図上で右クリック</p>
-                            </div>
-                        </div>
-                        <div class="help-step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
-                                <h4>座標をコピー</h4>
-                                <p>表示された座標（例：35.6762, 139.6503）をクリックしてコピー</p>
-                            </div>
-                        </div>
-                        <div class="help-step">
-                            <div class="step-number">5</div>
-                            <div class="step-content">
-                                <h4>フォームに貼り付け</h4>
-                                <p>コピーした座標を「住所または座標情報」欄に貼り付け</p>
+                        
+                        <!-- 世界の地域選択 -->
+                        <div id="world-area" class="hidden">
+                            <label class="form-label">地域を選択してください</label>
+                            <div class="region-grid">
+                                <div class="region-option" data-region="asia">
+                                    <i class="fas fa-torii-gate"></i>
+                                    <div>アジア</div>
+                                </div>
+                                <div class="region-option" data-region="europe">
+                                    <i class="fas fa-landmark"></i>
+                                    <div>ヨーロッパ</div>
+                                </div>
+                                <div class="region-option" data-region="africa">
+                                    <i class="fas fa-mountain"></i>
+                                    <div>アフリカ</div>
+                                </div>
+                                <div class="region-option" data-region="oceania">
+                                    <i class="fas fa-island-tropical"></i>
+                                    <div>オセアニア</div>
+                                </div>
+                                <div class="region-option" data-region="north-america">
+                                    <i class="fas fa-city"></i>
+                                    <div>北アメリカ</div>
+                                </div>
+                                <div class="region-option" data-region="south-america">
+                                    <i class="fas fa-tree"></i>
+                                    <div>南アメリカ</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <!-- 思い出の場所情報 -->
+                <div class="form-group">
+                    <label for="place-name" class="form-label">
+                        <i class="fas fa-map-pin"></i> 思い出の場所の名前
+                    </label>
+                    <input type="text" id="place-name" class="form-input" placeholder="例：吉田キャンパス図書館" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="memory-content" class="form-label">
+                        <i class="fas fa-heart"></i> 思い出の内容
+                    </label>
+                    <textarea id="memory-content" class="form-textarea" 
+                              placeholder="この場所での思い出やエピソードを教えてください..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location-info" class="form-label">
+                        <i class="fas fa-location-dot"></i> 住所・座標情報
+                    </label>
+                    <textarea id="location-info" class="form-textarea" 
+                              placeholder="住所または座標（緯度, 経度）を入力してください" required></textarea>
+                </div>
+                
+                <!-- 役立つフレーズ（海外選択時のみ表示） -->
+                <div class="form-group hidden" id="useful-phrase-group">
+                    <label for="useful-phrase" class="form-label">
+                        <i class="fas fa-comment"></i> その地域で役立つフレーズ
+                    </label>
+                    <textarea id="useful-phrase" class="form-textarea" 
+                              placeholder="現地で役立つ言葉やフレーズがあれば教えてください"></textarea>
+                </div>
+                
+                <!-- 送信 -->
+                <button type="submit" class="submit-btn" id="submit-btn" disabled>
+                    <i class="fas fa-paper-plane"></i> 投稿を送信する
+                </button>
+            </form>
         </div>
     </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loading-overlay">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>送信中...</p>
-        </div>
-    </div>
-
+    
     <!-- Scripts -->
-    <script src="js/form-steps.js"></script>
     <script src="js/google-forms.js"></script>
-    <!-- <script src="js/main.js"></script> -->
+    <script>
+        // フォーム管理クラス
+        class FormManager {
+            constructor() {
+                this.formData = {
+                    privacyAgreement: false,
+                    name: '',
+                    admissionYear: '',
+                    department: '',
+                    mapType: null,
+                    area: null,
+                    placeName: '',
+                    memoryContent: '',
+                    locationInfo: '',
+                    usefulPhrase: ''
+                };
+                
+                this.prefectures = [
+                    '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
+                    '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
+                    '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県',
+                    '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県',
+                    '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県',
+                    '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県',
+                    '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県'
+                ];
+                
+                this.regions = {
+                    'asia': 'アジア',
+                    'europe': 'ヨーロッパ',
+                    'africa': 'アフリカ',
+                    'oceania': 'オセアニア',
+                    'north-america': '北アメリカ',
+                    'south-america': '南アメリカ'
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.generatePrefectureButtons();
+                this.bindEvents();
+                this.updateSubmitButton();
+                console.log('📝 FormManager初期化完了');
+            }
+            
+            generatePrefectureButtons() {
+                const grid = document.getElementById('prefecture-grid');
+                if (!grid) return;
+                
+                grid.innerHTML = '';
+                this.prefectures.forEach(prefecture => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'prefecture-btn';
+                    button.dataset.prefecture = prefecture;
+                    button.textContent = prefecture;
+                    button.addEventListener('click', () => this.selectPrefecture(prefecture));
+                    grid.appendChild(button);
+                });
+            }
+            
+            bindEvents() {
+                // フォーム送信防止
+                document.getElementById('main-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.submitForm();
+                });
+                
+                // 基本項目
+                document.getElementById('privacy-agreement').addEventListener('change', (e) => {
+                    this.formData.privacyAgreement = e.target.checked;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('name').addEventListener('input', (e) => {
+                    this.formData.name = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('admission-year').addEventListener('change', (e) => {
+                    this.formData.admissionYear = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('department').addEventListener('change', (e) => {
+                    this.formData.department = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('place-name').addEventListener('input', (e) => {
+                    this.formData.placeName = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('memory-content').addEventListener('input', (e) => {
+                    this.formData.memoryContent = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('location-info').addEventListener('input', (e) => {
+                    this.formData.locationInfo = e.target.value;
+                    this.updateSubmitButton();
+                });
+                
+                document.getElementById('useful-phrase').addEventListener('input', (e) => {
+                    this.formData.usefulPhrase = e.target.value;
+                });
+                
+                // 地図範囲選択
+                document.querySelectorAll('.map-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.selectMapType(option.dataset.map);
+                    });
+                });
+                
+                // 世界地域選択
+                document.querySelectorAll('.region-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.selectRegion(option.dataset.region);
+                    });
+                });
+            }
+            
+            selectMapType(mapType) {
+                this.formData.mapType = mapType;
+                this.formData.area = null; // リセット
+                
+                // UI更新
+                document.querySelectorAll('.map-option').forEach(option => {
+                    option.classList.toggle('selected', option.dataset.map === mapType);
+                });
+                
+                // エリア選択表示
+                const areaSelection = document.getElementById('area-selection');
+                const japanArea = document.getElementById('japan-area');
+                const worldArea = document.getElementById('world-area');
+                const usefulPhraseGroup = document.getElementById('useful-phrase-group');
+                
+                // 全て非表示
+                areaSelection.classList.add('hidden');
+                japanArea.classList.add('hidden');
+                worldArea.classList.add('hidden');
+                usefulPhraseGroup.classList.add('hidden');
+                
+                // 選択されたボタンのリセット
+                document.querySelectorAll('.prefecture-btn.selected').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                document.querySelectorAll('.region-option.selected').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                if (mapType === 'japan') {
+                    areaSelection.classList.remove('hidden');
+                    japanArea.classList.remove('hidden');
+                } else if (mapType === 'world') {
+                    areaSelection.classList.remove('hidden');
+                    worldArea.classList.remove('hidden');
+                    usefulPhraseGroup.classList.remove('hidden');
+                }
+                
+                this.updateSubmitButton();
+                console.log(`🗺️ 地図タイプ選択: ${mapType}`);
+            }
+            
+            selectPrefecture(prefecture) {
+                this.formData.area = prefecture;
+                
+                document.querySelectorAll('.prefecture-btn').forEach(btn => {
+                    btn.classList.toggle('selected', btn.dataset.prefecture === prefecture);
+                });
+                
+                this.updateSubmitButton();
+                console.log(`🏛️ 都道府県選択: ${prefecture}`);
+            }
+            
+            selectRegion(region) {
+                this.formData.area = this.regions[region];
+                
+                document.querySelectorAll('.region-option').forEach(option => {
+                    option.classList.toggle('selected', option.dataset.region === region);
+                });
+                
+                this.updateSubmitButton();
+                console.log(`🌍 地域選択: ${this.regions[region]}`);
+            }
+            
+            validateForm() {
+                const requiredFields = [
+                    'privacyAgreement',
+                    'name', 
+                    'admissionYear', 
+                    'department', 
+                    'mapType', 
+                    'placeName', 
+                    'memoryContent', 
+                    'locationInfo'
+                ];
+                
+                // 基本項目チェック
+                for (const field of requiredFields) {
+                    if (!this.formData[field] || this.formData[field] === '') {
+                        return false;
+                    }
+                }
+                
+                // エリア選択チェック（キャンパス以外）
+                if (this.formData.mapType !== 'campus' && !this.formData.area) {
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            updateSubmitButton() {
+                const submitBtn = document.getElementById('submit-btn');
+                const isValid = this.validateForm();
+                
+                submitBtn.disabled = !isValid;
+                submitBtn.style.opacity = isValid ? '1' : '0.6';
+            }
+            
+            async submitForm() {
+                if (!this.validateForm()) {
+                    this.showNotification('入力内容を確認してください', 'error');
+                    return;
+                }
+                
+                const submitBtn = document.getElementById('submit-btn');
+                const container = document.querySelector('.form-container');
+                
+                // ローディング状態
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 送信中...';
+                container.classList.add('loading');
+                
+                try {
+                    console.log('📤 送信データ:', this.formData);
+                    
+                    // Google Forms送信
+                    if (window.GoogleFormsHandler) {
+                        await window.GoogleFormsHandler.submitToGoogleForms(this.formData);
+                        this.showNotification('✅ 投稿が正常に送信されました！', 'success');
+                        this.showSuccessScreen();
+                    } else {
+                        throw new Error('Google Forms連携が利用できません');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ 送信エラー:', error);
+                    this.showNotification('送信に失敗しました。もう一度お試しください。', 'error');
+                    
+                    // ボタン復元
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 投稿を送信する';
+                    container.classList.remove('loading');
+                }
+            }
+            
+            showSuccessScreen() {
+                const container = document.querySelector('.form-container');
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem 0;">
+                        <div style="font-size: 4rem; color: #28a745; margin-bottom: 2rem;">✅</div>
+                        <h2 style="color: #2c3e50; margin-bottom: 1rem; font-size: 2rem;">送信完了しました！</h2>
+                        <p style="color: #5a6c7d; font-size: 1.2rem; margin-bottom: 2rem;">
+                            プレースマークの投稿ありがとうございました。<br>
+                            内容を確認後、FGSSmapに追加させていただきます。
+                        </p>
+                        <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h3 style="color: #2c3e50; margin-bottom: 1rem;">投稿内容</h3>
+                            <div style="text-align: left; color: #495057;">
+                                <p><strong>投稿者:</strong> ${this.formData.name} (${this.formData.admissionYear}年度)</p>
+                                <p><strong>所属:</strong> ${this.formData.department}</p>
+                                <p><strong>地図:</strong> ${this.getMapTypeName()}</p>
+                                <p><strong>エリア:</strong> ${this.formData.area || 'キャンパス周辺'}</p>
+                                <p><strong>場所:</strong> ${this.formData.placeName}</p>
+                            </div>
+                        </div>
+                        <button onclick="location.reload()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; cursor: pointer; font-size: 1.1rem;">
+                            新しい投稿をする
+                        </button>
+                    </div>
+                `;
+            }
+            
+            getMapTypeName() {
+                const names = {
+                    'campus': 'キャンパス周辺',
+                    'japan': '日本全国',
+                    'world': '全世界'
+                };
+                return names[this.formData.mapType] || this.formData.mapType;
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => notification.classList.add('show'), 100);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+        }
+        
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            window.formManager = new FormManager();
+            console.log('🚀 FGSSmap プレースマーク募集フォーム開始');
+        });
+    </script>
 </body>
 </html>
