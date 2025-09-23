@@ -22,10 +22,7 @@ class FormStepManager {
       memoryContent: '',
       locationInfo: '',
       
-      // 写真情報
-      photoFile: null,
-      photoUrl: '',
-      photoType: 'file', // 'file' or 'url'
+      // 写真機能は削除しました
       
       // 海外の場合
       usefulPhrase: '',
@@ -59,7 +56,7 @@ class FormStepManager {
   init() {
     this.bindEvents();
     this.generatePrefectureButtons();
-    this.setupPhotoUpload();
+    // 写真アップロード機能は削除しました
     this.setupHelpModal();
     this.updateUI();
     console.log('📝 FormStepManager初期化完了（新バージョン）');
@@ -152,9 +149,7 @@ class FormStepManager {
       this.updateNavigationButtons(); // UI更新
     });
     
-    document.getElementById('photo-url')?.addEventListener('input', (e) => {
-      this.formData.photoUrl = e.target.value;
-    });
+    // 写真URL入力機能は削除しました
     
     document.getElementById('useful-phrase')?.addEventListener('input', (e) => {
       this.formData.usefulPhrase = e.target.value;
@@ -186,23 +181,7 @@ class FormStepManager {
     });
   }
   
-  setupPhotoUpload() {
-    // Photo tab switching
-    document.querySelectorAll('.photo-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabType = tab.dataset.tab;
-        this.switchPhotoTab(tabType);
-      });
-    });
-    
-    // File upload
-    const fileInput = document.getElementById('photo-file');
-    if (fileInput) {
-      fileInput.addEventListener('change', (e) => {
-        this.handleFileUpload(e.target.files[0]);
-      });
-    }
-  }
+  // 写真アップロード機能は削除しました
   
   setupHelpModal() {
     // Location help button
@@ -243,61 +222,11 @@ class FormStepManager {
     });
   }
   
-  switchPhotoTab(tabType) {
-    this.formData.photoType = tabType;
-    
-    // Update tab buttons
-    document.querySelectorAll('.photo-tab').forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.tab === tabType);
-    });
-    
-    // Update tab content
-    document.querySelectorAll('.photo-tab-content').forEach(content => {
-      const isActive = content.id === `photo-${tabType}-tab`;
-      content.classList.toggle('active', isActive);
-    });
-    
-    console.log(`📷 写真タブ切り替え: ${tabType}`);
-  }
+  // 写真タブ機能は削除しました
   
-  handleFileUpload(file) {
-    if (!file) return;
-    
-    // File size check (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      this.showNotification('ファイルサイズが大きすぎます（最大5MB）', 'error');
-      return;
-    }
-    
-    // File type check
-    if (!file.type.startsWith('image/')) {
-      this.showNotification('画像ファイルを選択してください', 'error');
-      return;
-    }
-    
-    this.formData.photoFile = file;
-    this.showPhotoPreview(file);
-    
-    console.log(`📸 写真アップロード: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
-  }
+  // ファイルアップロード機能は削除しました
   
-  showPhotoPreview(file) {
-    const preview = document.getElementById('photo-preview');
-    if (!preview) return;
-    
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      preview.innerHTML = `
-        <img src="${e.target.result}" alt="アップロードされた写真">
-        <div class="photo-preview-info">
-          <div><strong>${file.name}</strong></div>
-          <div>${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-        </div>
-      `;
-      preview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
+  // 写真プレビュー機能は削除しました
   
   showHelpModal() {
     const modal = document.getElementById('help-modal-overlay');
@@ -687,9 +616,7 @@ class FormStepManager {
     document.getElementById('confirm-location-info').textContent = 
       this.formData.locationInfo || '-';
     
-    // 写真
-    const photoInfo = this.getPhotoInfo();
-    document.getElementById('confirm-photo').textContent = photoInfo;
+    // 写真機能は削除しました
     
     // 役立つフレーズ（海外の場合のみ）
     const phraseSection = document.getElementById('confirm-phrase-section');
@@ -702,14 +629,7 @@ class FormStepManager {
     }
   }
   
-  getPhotoInfo() {
-    if (this.formData.photoType === 'file' && this.formData.photoFile) {
-      return `${this.formData.photoFile.name} (${(this.formData.photoFile.size / 1024 / 1024).toFixed(2)}MB)`;
-    } else if (this.formData.photoType === 'url' && this.formData.photoUrl) {
-      return this.formData.photoUrl;
-    }
-    return '未添付';
-  }
+  // 写真情報取得機能は削除しました
   
   async submitForm() {
     if (!this.validateFormData()) {
